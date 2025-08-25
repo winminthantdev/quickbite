@@ -8,84 +8,86 @@ const Navbar = () => {
 
     const [open, setOpen] = useState(false)
 
-    useEffect(()=>{
-        if(open){
-            
+    useEffect(() => {
+        if (open) {
+
             console.log("hello")
-        }else{
+        } else {
             console.log("olleh")
         }
-    },[open])
+    }, [open])
 
 
     return (
-        <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
+        <div className="fixed w-full z-40">
+            <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
 
-            <a href="#">
-                <img src={logo} className='w-38 md:w-48 lg:w-60' alt="logo" />
-            </a>
+                <a href="#">
+                    <img src={logo} className='w-38 md:w-48 lg:w-60' alt="logo" />
+                </a>
 
-            {/* Desktop Menu */}
-            <div className="hidden sm:flex items-center gap-8">
+                {/* Desktop Menu */}
+                <div className="hidden md:flex items-center gap-8">
 
-                <a href="#">Home</a>
+                    <a href="#">Home</a>
 
-                {dummyCategories.map((category, index) => (
-                    <div key={index} className="relative group">
-                        <a href="#" className="flex items-center space-x-2">
-                        <span>{category.text}</span>
-                        <FontAwesomeIcon icon="fa-solid fa-chevron-down" />
-                        </a>
+                    {dummyCategories.map((category, index) => (
+                        <div key={index} className="relative group">
+                            <a href="#" className="flex items-center space-x-2">
+                                <span>{category.text}</span>
+                                <FontAwesomeIcon icon="fa-solid fa-chevron-down" />
+                            </a>
 
-                        <div className="w-[500px] absolute hidden group-hover:flex flex-wrap mt-0 pt-4">
-                            <div className="bg-white shadow-lg rounded-lg z-50 border border-gray-200 grid grid-cols-3 space-x-16 items-center py-4 px-6">
-                            {
-                                Array.from(
-                                    new Set(
-                                        dummyProducts.filter((product) => product.category === category.path)
-                                             .map((subCategory,idx) => subCategory.subCategory)
-                                    )
-                                ).map((subCat,idx)=>(
-                                        <a href='#' className='text-nowrap'>{subCat}</a>
-                                ))
-                            }
+                            <div className="w-[500px] absolute hidden group-hover:flex flex-wrap mt-0 pt-4">
+                                <div className="bg-white shadow-lg rounded-lg z-50 border border-gray-200 grid grid-cols-3 space-x-16 items-center py-4 px-6">
+                                    {
+                                        Array.from(
+                                            new Set(
+                                                dummyProducts.filter((product) => product.category === category.path)
+                                                    .map((subCategory, idx) => subCategory.subCategory)
+                                            )
+                                        ).map((subCat, idx) => (
+                                            <a href='#' className='text-nowrap'>{subCat}</a>
+                                        ))
+                                    }
+                                </div>
                             </div>
-                            </div>
-                    </div>
+                        </div>
                     ))}
 
-                <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
-                    <input className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500" type="text" placeholder="Search products" />
-                    <img src={assets.search_icon} alt="cart_icon" />
+                    <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
+                        <input className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500" type="text" placeholder="Search products" />
+                        <img src={assets.search_icon} alt="cart_icon" />
+                    </div>
+
+                    <div className="relative cursor-pointer">
+                        <img src={assets.nav_cart_icon} alt='cart_icon' />
+                        <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">3</button>
+                    </div>
+
+                    <button className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary transition text-white rounded-full">
+                        Login
+                    </button>
                 </div>
 
-                <div className="relative cursor-pointer">
-                    <img src={assets.nav_cart_icon} alt='cart_icon' />
-                    <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">3</button>
+                <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="md:hidden">
+                    <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-transform duration-500 ${open ? "rotate-[-45deg] translate-x-[-2px] translate-y-[9px]" : ""}`}></div>
+                    <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-opacity duration-500 ${open ? "opacity-0" : ""}`}></div>
+                    <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-transform duration-500 ${open ? "rotate-[45deg] translate-x-[-2px] translate-y-[-9px]" : ""}`}></div>
+                </button>
+
+                {/* Mobile Menu */}
+                <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
+                    <a href="#" className="block">Home</a>
+                    <a href="#" className="block">About</a>
+                    <a href="#" className="block">Contact</a>
+                    <button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary transition text-white rounded-full text-sm">
+                        Login
+                    </button>
                 </div>
 
-                <button className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary transition text-white rounded-full">
-                    Login
-                </button>
-            </div>
-
-            <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="sm:hidden">
-                    <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-transform duration-500 ${ open ? "rotate-[-45deg] translate-x-[-2px] translate-y-[9px]" : "" }`}></div>
-                    <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-opacity duration-500 ${ open ? "opacity-0" : "" }`}></div>
-                    <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-transform duration-500 ${ open ? "rotate-[45deg] translate-x-[-2px] translate-y-[-9px]" : "" }`}></div>
-            </button>
-
-            {/* Mobile Menu */}
-            <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
-                <a href="#" className="block">Home</a>
-                <a href="#" className="block">About</a>
-                <a href="#" className="block">Contact</a>
-                <button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary transition text-white rounded-full text-sm">
-                    Login
-                </button>
-            </div>
-
-        </nav>
+            </nav>
+        </div>
     )
 }
 

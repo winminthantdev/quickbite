@@ -15,6 +15,11 @@ import leaf_icon from "./leaf_icon.svg";
 import black_arrow_icon from "./black_arrow_icon.svg";
 import white_arrow_icon from "./white_arrow_icon.svg";
 
+import slide1 from "./slide_1.jpg"
+import slide2 from "./slide_2.webp"
+import slide3 from "./slide_3.webp"
+import slide4 from "./slide_4.jpg"
+
 export const assets = {
   logo,
   search_icon,
@@ -32,6 +37,10 @@ export const assets = {
   leaf_icon,
   black_arrow_icon,
   white_arrow_icon,
+  slide1,
+  slide2,
+  slide3,
+  slide4
 };
 
 // Category datas
