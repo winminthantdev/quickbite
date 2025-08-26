@@ -20,6 +20,11 @@ import slide2 from "./slide_2.webp"
 import slide3 from "./slide_3.webp"
 import slide4 from "./slide_4.jpg"
 
+import chinese_food_image from './chinese_food_image.jpeg'
+import drinks_image from './drink.png'
+import burmese_food_image from './burmesefood.jpg'
+import thai_food_image from './thaifood.jpg'
+
 export const assets = {
   logo,
   search_icon,
@@ -37,10 +42,16 @@ export const assets = {
   leaf_icon,
   black_arrow_icon,
   white_arrow_icon,
+
   slide1,
   slide2,
   slide3,
-  slide4
+  slide4,
+
+  chinese_food_image,
+  burmese_food_image,
+  thai_food_image,
+  drinks_image,
 };
 
 // Category datas
@@ -48,26 +59,22 @@ export const dummyCategories = [
   {
     "text": "Chinese Food",
     "path": "Chinese",
-    "image": "chinese_food_image",
-    "bgColor": "#FFE8E8"
+    "image": chinese_food_image,
   },
   {
     "text": "Thai Food",
     "path": "Thai",
-    "image": "thai_food_image",
-    "bgColor": "#E8FFF0"
+    "image": thai_food_image,
   },
   {
     "text": "Burmese Food",
     "path": "Burmese",
-    "image": "burmese_food_image",
-    "bgColor": "#E8F0FF"
+    "image": burmese_food_image,
   },
   {
     "text": "Drinks",
     "path": "Drinks",
-    "image": "drinks_image",
-    "bgColor": "#FFF6E8"
+    "image": drinks_image,
   }
 ];
 

@@ -32,7 +32,7 @@ const MainBanner = () => {
                 className="mySwiper"
             >
                 <SwiperSlide>
-                    <div className="md:container w-full md:h-[55vh] relative rounded-lg overflow-hidden mx-auto md:mt-30">
+                    <div className="md:container w-full md:h-[55vh] relative md:rounded-lg overflow-hidden mx-auto md:mt-30">
                         <img src={assets.slide4} alt="banner" className="w-full h-screen md:h-auto object-cover object-left md:block" />
                         <div className="absolute left-[50%] top-[50%] md:left-24 translate-[-50%] md:translate-0 md:left-20 md:top-50">
                             <h3 className='w-auto inline-block sm:text-sm bg-yellow-400 rounded text-center px-4 py-1'>Free Shipping - orders over $100</h3>
@@ -44,7 +44,7 @@ const MainBanner = () => {
                 </SwiperSlide>
 
                 <SwiperSlide>
-                    <div className="md:container w-full md:h-[55vh] relative rounded-lg overflow-hidden mx-auto md:mt-30">
+                    <div className="md:container w-full md:h-[55vh] relative md:rounded-lg overflow-hidden mx-auto md:mt-30">
                         <img src={assets.slide3} alt="banner" className="w-full h-screen md:h-auto object-cover object-left md:block" />
                         <div className="absolute left-[50%] top-[50%] translate-[-50%] md:top-50">
                             <h3 className='w-auto inline-block font-bold sm:text-sm bg-yellow-400 rounded text-center px-4 py-1'>Opening Sale Discount 50%</h3>
@@ -55,7 +55,7 @@ const MainBanner = () => {
                 </SwiperSlide>
 
                 <SwiperSlide>
-                    <div className="md:container w-full md:h-[55vh] relative rounded-lg overflow-hidden mx-auto md:mt-30">
+                    <div className="md:container w-full md:h-[55vh] relative md:rounded-lg overflow-hidden mx-auto md:mt-30">
                         <img src={assets.slide2} alt="banner" className="w-full h-screen md:h-auto object-cover object-left md:block" />
                         <div className="absolute left-[50%] top-[50%] md:left-24 translate-[-50%] md:translate-0 md:left-20 md:top-50">
                             <h3 className='font-bold sm:text-xl text-white'>Mega Discounts On</h3>
@@ -67,7 +67,7 @@ const MainBanner = () => {
                 </SwiperSlide>
 
                 <SwiperSlide>
-                    <div className="md:container w-full md:h-[55vh] relative rounded-lg overflow-hidden mx-auto md:mt-30">
+                    <div className="md:container w-full md:h-[55vh] relative md:rounded-lg overflow-hidden mx-auto md:mt-30">
                         <img src={assets.slide1} alt="banner" className="w-full h-screen md:h-auto object-cover object-left md:block" />
                         <div className="absolute left-[50%] top-[50%] md:left-24 translate-[-50%] md:translate-0 md:left-20 md:top-50">
                             <h3 className='font-bold sm:text-xl'>Mega Discounts On</h3>

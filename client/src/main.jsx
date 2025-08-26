@@ -5,9 +5,10 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import './lib/fontawesome.js'
+import { BrowserRouter } from 'react-router'
 
 createRoot(document.getElementById('root')).render(
-  <div>
+  <BrowserRouter>
     <App />
-  </div>,
+  </BrowserRouter>,
 )
