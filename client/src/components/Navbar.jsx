@@ -3,38 +3,30 @@ import logo from './../assets/logo.svg';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { assets, dummyCategories, dummyProducts } from '../assets/assets';
+import { useNavigate } from 'react-router';
 
 const Navbar = () => {
 
     const [open, setOpen] = useState(false)
-
-    useEffect(() => {
-        if (open) {
-
-            console.log("hello")
-        } else {
-            console.log("olleh")
-        }
-    }, [open])
-
+    const navigate = useNavigate();
 
     return (
         <div className="fixed w-full z-40">
-            <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
+            <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all gap-4">
 
                 <a href="#">
-                    <img src={logo} className='w-38 md:w-48 lg:w-60' alt="logo" />
+                    <img src={logo} className='w-38 md:w-48' alt="logo" />
                 </a>
 
                 {/* Desktop Menu */}
-                <div className="hidden md:flex items-center gap-8">
+                <div className="hidden lg:flex items-center gap-4 xl:gap-8">
 
                     <a href="#">Home</a>
 
                     {dummyCategories.map((category, index) => (
                         <div key={index} className="relative group">
                             <a href="#" className="flex items-center space-x-2">
-                                <span>{category.text}</span>
+                                <span className='truncate white-space-nowrap overflow-hidden'>{category.text}</span>
                                 <FontAwesomeIcon icon="fa-solid fa-chevron-down" />
                             </a>
 
@@ -70,14 +62,20 @@ const Navbar = () => {
                     </button>
                 </div>
 
-                <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="md:hidden">
-                    <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-transform duration-500 ${open ? "rotate-[-45deg] translate-x-[-2px] translate-y-[9px]" : ""}`}></div>
-                    <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-opacity duration-500 ${open ? "opacity-0" : ""}`}></div>
-                    <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-transform duration-500 ${open ? "rotate-[45deg] translate-x-[-2px] translate-y-[-9px]" : ""}`}></div>
-                </button>
-
                 {/* Mobile Menu */}
-                <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
+                <div className='flex items-center gap-6 sm:hidden'>
+                    <div className="relative cursor-pointer" onClick={()=>navigate('/cart')}>
+                        <img src={assets.nav_cart_icon} className='w-6 opacity-80' alt="cart" />
+                        <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">3</button>
+                    </div>
+                    <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="lg:hidden">
+                        <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-transform duration-500 ${open ? "rotate-[-45deg] translate-x-[-2px] translate-y-[9px]" : ""}`}></div>
+                        <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-opacity duration-500 ${open ? "opacity-0" : ""}`}></div>
+                        <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-transform duration-500 ${open ? "rotate-[45deg] translate-x-[-2px] translate-y-[-9px]" : ""}`}></div>
+                    </button>
+                </div>
+
+                <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm lg:hidden`}>
                     <a href="#" className="block">Home</a>
                     <a href="#" className="block">About</a>
                     <a href="#" className="block">Contact</a>

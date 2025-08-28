@@ -5,6 +5,10 @@
     font-family: "Outfit", sans-serif;
 }
 
+body{
+    background: #f4f4f4;
+}
+
 @theme{
     --color-primary: #4caf50;
     --color-secondary: #ffd700;

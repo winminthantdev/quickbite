@@ -14,6 +14,13 @@ import delivery_truck_icon from "./delivery_truck_icon.svg";
 import leaf_icon from "./leaf_icon.svg";
 import black_arrow_icon from "./black_arrow_icon.svg";
 import white_arrow_icon from "./white_arrow_icon.svg";
+import clock_icon from "./clock.png";
+import delivery_icon from "./delivery.png";
+import plus_icon from "./plus.png";
+
+import play_store from './play_store.png'
+import app_store from './app_store.png'
+import app_mockup from './app_mockup.png'
 
 import slide1 from "./slide_1.jpg"
 import slide2 from "./slide_2.webp"
@@ -42,6 +49,13 @@ export const assets = {
   leaf_icon,
   black_arrow_icon,
   white_arrow_icon,
+  clock_icon,
+  delivery_icon,
+  plus_icon,
+
+  play_store,
+  app_store,
+  app_mockup,
 
   slide1,
   slide2,
@@ -78,6 +92,40 @@ export const dummyCategories = [
   }
 ];
 
+
+// Footer Links
+
+export const footerLinks = [
+  {
+    title: "Quick Links",
+    links: [
+      { text: "Home", url: "#" },
+      { text: "Best Sellers", url: "#" },
+      { text: "Offers & Deals", url: "#" },
+      { text: "Contact Us", url: "#" },
+      { text: "FAQs", url: "#" },
+    ],
+  },
+  {
+    title: "Need help?",
+    links: [
+      { text: "Delivery Information", url: "#" },
+      { text: "Return & Refund Policy", url: "#" },
+      { text: "Payment Methods", url: "#" },
+      { text: "Track your Order", url: "#" },
+      { text: "Contact Us", url: "#" },
+    ],
+  },
+  {
+    title: "Follow Us",
+    links: [
+      { text: "Instagram", url: "#" },
+      { text: "Twitter", url: "#" },
+      { text: "Facebook", url: "#" },
+      { text: "YouTube", url: "#" },
+    ],
+  },
+];
 
 //  products datas
 export const dummyProducts = [

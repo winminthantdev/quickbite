@@ -1,50 +1,50 @@
 import React from 'react'
-import { Navigate } from 'react-router';
+import { useNavigate } from 'react-router';
+import Title from './Title';
+import { assets } from '../assets/assets';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ProductCard = () => {
 
-    const navigate = Navigate();
+    const navigate = useNavigate();
+
   return (
-    <div className="w-full min-w-46 max-w-56 border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white"
-            onClick={()=> {navigate(`/products/${product.category.toLowerCase()}/${product._id}`); scrollTo(0,0)}}
-        >
-            <div className="group cursor-pointer flex items-center justify-center px-2">
-                <img className="group-hover:scale-105 transition max-w-26 md:max-w-36" src={product.image[0]} alt={product.name} />
-            </div>
-            <div className="text-gray-500/60 text-sm">
-                <p>{product.category}</p>
-                <p className="text-gray-700 font-medium text-lg truncate w-full">{product.name}</p>
-                <div className="flex items-center gap-0.5">
-                    {Array(5).fill('').map((_, i) => (
-                            <img key={i} src={i < 4 ? assets.star_icon : assets.star_dull_icon} className='md:w-3.5 w3' alt='' />
-                    ))}
-                    <p>(4)</p>
-                </div>
-                <div className="flex items-end justify-between mt-3">
-                    <p className="md:text-xl text-base font-medium text-primary">
-                       {currency} ${product.offerPrice}{" "} <span className="text-gray-500/60 md:text-sm text-xs line-through">${currency}{product.price}</span>
-                    </p>
-                    <div className="text-primary" onClick={(e)=> {e.stopPropagation();}}>
-                        {!cartItems[product._id] ? (
-                            <button className=" md:w-[80px] w-[64px] h-[34px] flex items-center justify-center gap-1 bg-primary/10 border border-primary rounded cursor-pointer" onClick={() => {addToCart(product._id)}} >
-                                <img src={assets.cart_icon} alt="cart_icon" />
-                                Add
-                            </button>
-                        ) : (
-                            <div className="flex items-center justify-center gap-2 md:w-20 w-16 h-[34px] bg-primary/25 rounded select-none">
-                                <button onClick={() => {removeFromCart(product._id)}} className="cursor-pointer text-md px-2 h-full" >
-                                    -
-                                </button>
-                                <span className="w-5 text-center">{cartItems[product._id]}</span>
-                                <button onClick={() => {addToCart(product._id)}} className="cursor-pointer text-md px-2 h-full" >
-                                    +
-                                </button>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 place-items-center">
+
+            {
+                Array(5).fill('').map((_,i)=>(
+                    <div className="w-full sm:w-62 xl:w-68 relative flex flex-col bg-white border border-gray-200 rounded overflow-hidden shadow-md cursor-pointer my-4" onClick={()=>navigate("/")}>
+                        {/* discount text when have discount */}
+                        <div className="absolute top-2 right-2 bg-green-600 text-white text-bold rounded px-2">15% off Ks.12000</div>
+                        <img src="https://delishglobe.com/wp-content/uploads/2025/02/Burmese-Mohinga-Fish-Noodle-Soup.png" className='w-full h-42 object-cover' alt="food" />
+                        <div className="relative text-sm p-2 space-y-2">
+                            <div className="flex justify-between items-center">
+                                <h3 className='w-48 text-xl font-bold truncate white-space-nowrap overflow-hidden'>Monhinga</h3>
+                                <div className="flex items-center gap-2">
+                                    <img src={assets.star_icon} className='w-4 h-4' alt="star_icon" />
+                                    <span className='text-xs text-slate-500'>4.9</span>
+                                </div>
                             </div>
-                        )}
+                            <p className='text-slate-500 text-xs'>$ <span>Burmese food</span></p>
+                            <div className="flex items-center gap-2 text-slate-500 text-xs font-medium">
+                                <div className="flex items-center gap-2">
+                                    <img src={assets.clock_icon} className='w-4 h-4' alt="" />
+                                    <span>25-40 minutes</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <img src={assets.delivery_icon} className='w-4 h-4' alt="" />
+                                    <span>750MMK</span>
+                                </div>
+                            </div>
+                            {/* add to cart button */}
+                            <div className="w-8 h-8 bg-green-500 flex justify-center items-center text-white rounded-full shadow absolute right-4 bottom-4 p-2">
+                                <FontAwesomeIcon icon="fa-solid fa-plus" />
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                ))
+            }
+    </div>
   )
 }
 
