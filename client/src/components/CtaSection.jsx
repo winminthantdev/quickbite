@@ -28,16 +28,16 @@ const CtaSection = () => {
     }, [])
 
   return (
-    <div ref={sectionRef} className="container mx-auto px-8 md:px-0 py-4">
+    <div ref={sectionRef} className="">
       <div className="grid grid-cols-1 md:grid-cols-2 place-items-center gap-8">
         <div className={`flex flex-col space-y-4 transition-all duration-700 ${isVisible ? 'left_to_rights' : 'opacity-0'}`}>
           <h1 className='text-2xl md:text-5xl font-bold'>Simple Way to Order <br />Your Food Faster</h1>
           <p className='text-justify text-slate-500 md:pe-16'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus obcaecati veritatis esse. Doloribus est fuga itaque quibusdam, nisi placeat ea!</p>
           <div className="flex items-center justify-center md:justify-start gap-4">
-            <div className="w-38 md:w-auto">
+            <div className="w-38 md:w-auto cursor-pointer">
               <img src={assets.play_store} alt="" className="" />
             </div>
-            <div className="w-38 md:w-auto">
+            <div className="w-38 md:w-auto cursor-pointer">
               <img src={assets.app_store} alt="" className="" />
             </div>
           </div>

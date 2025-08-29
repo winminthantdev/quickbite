@@ -8,7 +8,7 @@ import Footer from '../components/Footer'
 
 const Home = () => {
   return (
-    <div className='overflow-hidden'>
+    <div className='container overflow-hidden  mx-auto px-8 md:px-0 py-4 '>
       <MainBanner />
       <Category />
       <Promotion />

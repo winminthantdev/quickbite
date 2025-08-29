@@ -29,7 +29,27 @@
   transform: rotate(-90deg);
 }
 
+/* Hide scrollbar but still allow scroll */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
 
+
+/* Hide navigation buttons by default */
+.mySwiper .swiper-button-prev,
+.mySwiper .swiper-button-next {
+  @apply opacity-0 transition-opacity duration-300;
+}
+
+/* Show on hover */
+.mySwiper:hover .swiper-button-prev,
+.mySwiper:hover .swiper-button-next {
+  @apply opacity-100;
+}
 
 /* ------------------ animation ------------------------- */
 

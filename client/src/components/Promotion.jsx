@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Title from './Title'
 import ProductCard from './ProductCard'
+import { dummyProducts } from '../assets/assets'
 
 const Promotion = () => {
     const sectionRef = useRef(null)
@@ -27,12 +28,15 @@ const Promotion = () => {
       }
     }, [])
 
+    const promotions = dummyProducts.filter(product => product.promotion && product.promotion.isActive).sort((a, b) => b.promotion.discountPercent - a.promotion.discountPercent);
+
+
   return (
     <div ref={sectionRef}
-      className={`container mx-auto px-8 md:px-0 py-4 transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-0'}`}
+      className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-0'}`}
     >
-      <Title title="Promos for this Month" />
-      <ProductCard />
+      <Title title="Promos for this Month" haveButton={true} />
+      <ProductCard products={promotions} />
     </div>
   )
 }

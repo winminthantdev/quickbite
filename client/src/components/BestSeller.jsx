@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Title from './Title'
 import ProductCard from './ProductCard'
+import { dummyProducts } from '../assets/assets'
 
 const BestSeller = () => {
   const sectionRef = useRef(null)
@@ -27,15 +28,18 @@ const BestSeller = () => {
     }
   }, [])
 
+    const bestSellers = dummyProducts.filter(product=> product.bestSeller).sort(() => Math.random() - 0.5);    
+
+
   return (
     <div
       ref={sectionRef}
-      className={`container mx-auto px-8 md:px-0 py-4 transition-all duration-700 ${
+      className={`transition-all duration-700 ${
         isVisible ? 'bottom_to_tops' : 'opacity-50'
       }`}
     >
       <Title title="Best Seller" />
-      <ProductCard />
+      <ProductCard products={bestSellers} />
     </div>
   )
 }
