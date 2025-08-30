@@ -38,8 +38,8 @@ const BestSeller = () => {
         isVisible ? 'bottom_to_tops' : 'opacity-50'
       }`}
     >
-      <Title title="Best Seller" />
-      <ProductCard products={bestSellers} />
+      <Title title="Best Seller" haveButton={true}/>
+      <ProductCard products={bestSellers} wrap={true} />
     </div>
   )
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Title from './Title'
 import ProductCard from './ProductCard'
 import { dummyProducts } from '../assets/assets'
+import { faTruckMonster } from '@fortawesome/free-solid-svg-icons'
 
 const Promotion = () => {
     const sectionRef = useRef(null)
@@ -35,8 +36,8 @@ const Promotion = () => {
     <div ref={sectionRef}
       className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-0'}`}
     >
-      <Title title="Promos for this Month" haveButton={true} />
-      <ProductCard products={promotions} />
+      <Title title="Promos for this Month" haveButton={true} products={promotions} />
+      <ProductCard products={promotions} wrap={faTruckMonster} />
     </div>
   )
 }

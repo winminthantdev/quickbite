@@ -11,8 +11,8 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="fixed w-full z-40">
-            <nav className="flex items-center justify-between border-b border-gray-300 bg-white relative transition-all gap-4 mx-auto py-4">
+        <div className="fixed w-full border-b border-gray-300 bg-white z-1000">
+            <nav className="container flex items-center justify-between relative transition-all gap-4 mx-auto py-4">
 
                 <Link to="/">
                     <img src={logo} className='w-38' alt="logo" />
@@ -23,7 +23,7 @@ const Navbar = () => {
 
                     {dummyCategories.map((category, index) => (
                         <div key={index} className="relative group">
-                            <Link to={`/products/${category.path.toLOwc}`} className="flex items-center text-xs xl:text-md space-x-2">
+                            <Link to={`/products/${category.path.toLowerCase()}`} className="flex items-center text-xs xl:text-md space-x-2">
                                 <span className='truncate white-space-nowrap overflow-hidden'>{category.text}</span>
                                 <FontAwesomeIcon icon="fa-solid fa-chevron-down" />
                             </Link>
@@ -37,7 +37,7 @@ const Navbar = () => {
                                                     .map((subCategory, idx) => subCategory.subCategory)
                                             )
                                         ).map((subCat, idx) => (
-                                            <Link key={idx} to={`/products/${subCat.toLowerCase()}`} className='text-nowrap'>{subCat}</Link>
+                                            <Link key={idx} to={`/products/${category.path.toLowerCase()}/${subCat.toLowerCase()}`} className='text-nowrap'>{subCat}</Link>
                                         ))
                                     }
                                 </div>

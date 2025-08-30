@@ -1,7 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+import AllProducts from '../pages/AllProducts'
 
-const Title = ({title, haveButton}) => {
+const Title = ({title, haveButton,products}) => {
   return (
     <div className="flex justify-between my-4 md:my-8">
       <div className="flex flex-col items-center w-max">
@@ -9,7 +10,7 @@ const Title = ({title, haveButton}) => {
         <div className="w-20 h-0.5 bg-primary rounded-full mt-2"></div>
       </div>
       {
-        haveButton && <button type="button" className="group cursor-pointer px-4">See All <FontAwesomeIcon icon="fa-solid fa-arrow-right" className='text-slate-500 group-hover:text-black' /></button>
+        haveButton && <button type="button" className="group cursor-pointer px-4" >See All <FontAwesomeIcon icon="fa-solid fa-arrow-right" className='text-slate-500 group-hover:text-black' /></button>
       }
     </div>
   )

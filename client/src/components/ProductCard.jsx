@@ -4,18 +4,18 @@ import Title from './Title';
 import { assets } from '../assets/assets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const ProductCard = ({products}) => {  
+const ProductCard = ({products, wrap}) => {  
 
     const navigate = useNavigate();
 
   return (
-    <div className="w-full flex gap-6 overflow-x-auto whitespace-nowrap scrollbar-hide">
+    <div className={`w-full flex gap-6 ${wrap ? 'whitespace-nowrap overflow-x-auto' : 'flex-wrap'} scrollbar-hide`}>
   {
     products.map((product,idx)=>(
       <div 
         key={`${product._id}-${idx}`}
         className="group min-w-[250px] max-w-[280px] flex-shrink-0 relative flex flex-col bg-white border border-gray-200 rounded overflow-hidden shadow-md cursor-pointer my-4"
-        onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product._id}`)}
+        onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}/${product._id}`)}
       >
         {/* discount text when have discount */}
         {

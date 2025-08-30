@@ -30,6 +30,7 @@ const ProductDetails = () => {
                 <Link to={"/"}>Home</Link> /
                 <Link to={"/products"}> Products</Link> /
                 <Link to={`/products/${product.category.toLowerCase()}`}> {product.category}</Link> /
+                <Link to={`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}`}> {product.subCategory}</Link> /
                 <span className="text-primary"> {product.name}</span>
             </p>
 
@@ -59,9 +60,9 @@ const ProductDetails = () => {
                     </div>
 
                     <div className="mt-6">
-                        <p className={`${product.promotion.isActive ? 'text-gray-500/70 line-through inline-block me-2' : 'text-2xl font-medium'}`}>MRP: {product.price}</p>{product.promotion.isActive && <p className='inline-block'>{product.promotion.discountPercent}% off</p>}
+                        <p className={`${product.promotion.isActive ? 'text-gray-500/70 line-through inline-block me-2' : 'text-2xl font-medium'}`}>MMK: {product.price}</p>{product.promotion.isActive && <p className='inline-block'>{product.promotion.discountPercent}% off</p>}
                         {product.promotion.isActive && 
-                            <p className="text-2xl font-medium">MRP: {product.price - (product.price * product.promotion.discountPercent / 100)}</p>
+                            <p className="text-2xl font-medium">MMK: {product.price - (product.price * product.promotion.discountPercent / 100)}</p>
                         }
                         <span className="text-gray-500/70">(inclusive of all taxes)</span>
                     </div>
@@ -88,8 +89,8 @@ const ProductDetails = () => {
             {/* -------------------------- related products ------------------------ */}
             <div className="flex flex-col items-center mt-20">
                 <Title title="Related Products" haveButton={false} />
-                    <ProductCard products={relatedProducts} />
-                <button className='mx-auto cursor-pointer border rounded text-primary hover:bg-primary/10 transition my-16 px-12 py-2.5' onClick={()=> {navigate('/products'); scrollTo(0,0)}}>See more</button>
+                    <ProductCard products={relatedProducts} wrap={false} />
+                <button className='mx-auto cursor-pointer border rounded text-primary hover:bg-primary/10 transition my-16 px-12 py-2.5' onClick={()=> {navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}`); scrollTo(0,0)}}>See more</button>
             </div>
         </div>
     );
