@@ -37,7 +37,17 @@ const Promotion = () => {
       className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-0'}`}
     >
       <Title title="Promos for this Month" haveButton={true} products={promotions} />
-      <ProductCard products={promotions} wrap={faTruckMonster} />
+      <div className='flex gap-3 overflow-x-auto scrollbar-hide mt-6'>
+        {promotions.length > 0 ? (
+             promotions.map((product)=>(
+              <ProductCard key={product._id} product={product} />
+            ))
+        ): (
+          <p className="col-span-full text-center text-gray-500 py-8">
+            No products found.
+          </p>
+        )}
+      </div>
     </div>
   )
 }

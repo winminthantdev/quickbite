@@ -1,21 +1,17 @@
 import React from 'react'
 import { useNavigate } from 'react-router';
-import Title from './Title';
 import { assets } from '../assets/assets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const ProductCard = ({products, wrap}) => {  
+const ProductCard = ({product}) => {  
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
-    <div className={`w-full flex gap-6 ${wrap ? 'whitespace-nowrap overflow-x-auto' : 'flex-wrap'} scrollbar-hide`}>
-  {
-    products.map((product,idx)=>(
-      <div 
-        key={`${product._id}-${idx}`}
-        className="group min-w-[250px] max-w-[280px] flex-shrink-0 relative flex flex-col bg-white border border-gray-200 rounded overflow-hidden shadow-md cursor-pointer my-4"
-        onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}/${product._id}`)}
+    <div 
+        key={`${product._id}`}
+        className="group w-full min-w-[250px] max-w-[300px] flex-shrink-0 relative flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md cursor-pointer my-4"
+        onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}/${product._id}`, scrollTo(0,0))}
       >
         {/* discount text when have discount */}
         {
@@ -27,10 +23,10 @@ const ProductCard = ({products, wrap}) => {
         }
 
         
-        <div className="h-40 overflow-hidden">
+        <div className="aspect-[16/9] overflow-hidden">
           <img 
             src={product.image[0]}
-            className="w-full h-40 object-contain transition duration-300 group-hover:scale-110" 
+            className="w-full h-full object-cover transition duration-300 group-hover:scale-110" 
             alt={product.name} 
           />
         </div>
@@ -63,11 +59,9 @@ const ProductCard = ({products, wrap}) => {
           </div>
         </div>
       </div>
-    ))
-  }
-</div>
-
   )
 }
 
 export default ProductCard
+
+// 3/4 ?/280

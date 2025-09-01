@@ -13,12 +13,17 @@ const ProductDetails = () => {
 
     const product = dummyProducts.find((item)=> item._id === id);
 
+    if (!product) {
+        return <p className="text-center py-20">Product not found.</p>;
+    }
+
+
     useEffect(()=>{
         if(dummyProducts.length > 0){
             const productsCopy = dummyProducts.filter((item)=> product.subCategory === item.subCategory && product._id !== item._id)
             setRelatedProducts(productsCopy.slice(0,5))
         }
-    },[])    
+    },[product])    
 
     useEffect(()=>{
         setThumbnail(product?.image[0] ? product.image[0] : null)
@@ -38,7 +43,7 @@ const ProductDetails = () => {
                 <div className="flex flex-col-reverse md:flex-row items-center md:items-start gap-3">
                     <div className="flex md:flex-col gap-3">
                         {product.image.map((image, index) => (
-                            <div key={index} onClick={() => setThumbnail(image)} className="w-36 h-36 border border-gray-500/30 rounded overflow-hidden cursor-pointer" >
+                            <div key={image} onClick={() => setThumbnail(image)} className="w-36 h-36 border border-gray-500/30 rounded overflow-hidden cursor-pointer" >
                                 <img src={image} className='w-full h-full object-cover' alt={`Thumbnail ${index + 1}`} />
                             </div>
                         ))}
@@ -89,7 +94,17 @@ const ProductDetails = () => {
             {/* -------------------------- related products ------------------------ */}
             <div className="flex flex-col items-center mt-20">
                 <Title title="Related Products" haveButton={false} />
-                    <ProductCard products={relatedProducts} wrap={false} />
+                <div className='w-full flex gap-3 overflow-x-auto scrollbar-hide mt-6'>
+                    {relatedProducts.length > 0 ? (
+                        relatedProducts.map((product,idx)=>(
+                            <ProductCard key={idx} product={product} />
+                        ))
+                    ): (
+                        <p className="col-span-full text-center text-gray-500 py-8">
+                            No products found.
+                        </p>
+                    )}
+                </div>
                 <button className='mx-auto cursor-pointer border rounded text-primary hover:bg-primary/10 transition my-16 px-12 py-2.5' onClick={()=> {navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}`); scrollTo(0,0)}}>See more</button>
             </div>
         </div>

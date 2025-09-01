@@ -14,7 +14,7 @@ const BestSeller = () => {
           setIsVisible(true)
         }
       },
-      { threshold: 0.2 } 
+      { threshold: 0.2 }
     )
 
     if (sectionRef.current) {
@@ -28,18 +28,27 @@ const BestSeller = () => {
     }
   }, [])
 
-    const bestSellers = dummyProducts.filter(product=> product.bestSeller).sort(() => Math.random() - 0.5);    
+  const bestSellers = dummyProducts.filter(product => product.bestSeller).sort(() => Math.random() - 0.5);
 
 
   return (
     <div
       ref={sectionRef}
-      className={`transition-all duration-700 ${
-        isVisible ? 'bottom_to_tops' : 'opacity-50'
-      }`}
+      className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-50'
+        }`}
     >
-      <Title title="Best Seller" haveButton={true}/>
-      <ProductCard products={bestSellers} wrap={true} />
+      <Title title="Best Seller" haveButton={true} />
+      <div className='flex gap-3 overflow-x-auto scrollbar-hide mt-6'>
+        {bestSellers.length > 0 ? (
+             bestSellers.map((product)=>(
+              <ProductCard key={product._id} product={product} />
+            ))
+        ): (
+            <p className="col-span-full text-center text-gray-500 py-8">
+              No products found.
+            </p>
+        )}
+      </div>
     </div>
   )
 }
