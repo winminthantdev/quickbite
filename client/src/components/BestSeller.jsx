@@ -37,7 +37,7 @@ const BestSeller = () => {
       className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-50'
         }`}
     >
-      <Title title="Best Seller" haveButton={true} />
+      <Title title="Best Seller" />
       <div className='flex gap-3 overflow-x-auto scrollbar-hide mt-6'>
         {bestSellers.length > 0 ? (
              bestSellers.map((product)=>(

@@ -21,7 +21,6 @@ const ProductCard = ({product}) => {
             </div>
           )
         }
-
         
         <div className="aspect-[16/9] overflow-hidden">
           <img 
@@ -40,7 +39,7 @@ const ProductCard = ({product}) => {
             </div>
           </div>
           
-          <p className="text-slate-500 text-xs">$ <span>{product.subCategory}</span></p>
+          <p className="text-slate-500 text-xs">$ <span>{product.subCategory} ( {product.category} )</span></p>
           
           <div className="flex items-center gap-2 text-slate-500 text-xs font-medium">
             <div className="flex items-center gap-1">

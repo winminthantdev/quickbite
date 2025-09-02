@@ -36,7 +36,7 @@ const Promotion = () => {
     <div ref={sectionRef}
       className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-0'}`}
     >
-      <Title title="Promos for this Month" haveButton={true} products={promotions} />
+      <Title title="Promos for this Month" />
       <div className='flex gap-3 overflow-x-auto scrollbar-hide mt-6'>
         {promotions.length > 0 ? (
              promotions.map((product)=>(

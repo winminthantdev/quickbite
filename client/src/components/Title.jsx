@@ -3,9 +3,7 @@ import React from 'react'
 import AllProducts from '../pages/AllProducts'
 import { useNavigate } from 'react-router'
 
-const Title = ({title, haveButton,products}) => {
-
-  const navigate = useNavigate()
+const Title = ({title}) => {
 
   return (
     <div className="flex justify-between my-4 md:my-8">
@@ -13,9 +11,6 @@ const Title = ({title, haveButton,products}) => {
         <p className="text-3xl font-medium">{title}</p>
         <div className="w-20 h-0.5 bg-primary rounded-full mt-2"></div>
       </div>
-      {
-        haveButton && <button type="button" className="group cursor-pointer px-4" onClick={navigate(`/products/${category}`)}>See All <FontAwesomeIcon icon="fa-solid fa-arrow-right" className='text-slate-500 group-hover:text-black' /></button>
-      }
     </div>
   )
 }

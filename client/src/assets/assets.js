@@ -429,7 +429,7 @@ export const dummyProducts =
 
     // Thai Food
     {
-      _id: "cf03",
+      _id: "thf03",
       name: "Pad Thai",
       category: "Thai",
       subCategory: "Noodles",
@@ -441,7 +441,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf04",
+      _id: "thf04",
       name: "Tom Yum Soup",
       category: "Thai",
       subCategory: "Soups",
@@ -453,7 +453,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf08",
+      _id: "thf08",
       name: "Green Curry",
       category: "Thai",
       subCategory: "Curries",
@@ -467,7 +467,7 @@ export const dummyProducts =
 
     // Burmese Food
     {
-      _id: "cf10",
+      _id: "burf10",
       name: "Chicken Curry",
       category: "Burmese",
       subCategory: "Curries",
@@ -479,7 +479,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf14",
+      _id: "burf14",
       name: "Shan Noodles",
       category: "Burmese",
       subCategory: "Noodles",
@@ -491,7 +491,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf17",
+      _id: "burf17",
       name: "Fish Curry",
       category: "Burmese",
       subCategory: "Curries",
@@ -503,7 +503,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf19",
+      _id: "burf19",
       name: "Yangon Mee Shay",
       category: "Burmese",
       subCategory: "Noodles",
@@ -517,7 +517,7 @@ export const dummyProducts =
 
     // Drinks
     {
-      _id: "cf05",
+      _id: "d051",
       name: "Tea",
       category: "Drinks",
       subCategory: "Hot Beverages",
@@ -529,7 +529,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf07",
+      _id: "d052",
       name: "Coke",
       category: "Drinks",
       subCategory: "Soft Drinks",
@@ -541,7 +541,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf09",
+      _id: "d053",
       name: "Lemonade",
       category: "Drinks",
       subCategory: "Cold Beverages",
@@ -553,7 +553,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf11",
+      _id: "d054",
       name: "Coffee",
       category: "Drinks",
       subCategory: "Hot Beverages",
@@ -565,7 +565,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf13",
+      _id: "d055",
       name: "Iced Tea",
       category: "Drinks",
       subCategory: "Cold Beverages",
@@ -577,7 +577,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf15",
+      _id: "d056",
       name: "Sprite",
       category: "Drinks",
       subCategory: "Soft Drinks",
@@ -589,7 +589,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf16",
+      _id: "d057",
       name: "Hot Chocolate",
       category: "Drinks",
       subCategory: "Hot Beverages",
@@ -601,7 +601,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf18",
+      _id: "d058",
       name: "Fanta",
       category: "Drinks",
       subCategory: "Soft Drinks",
@@ -613,7 +613,7 @@ export const dummyProducts =
       inStock: true
     },
     {
-      _id: "cf20",
+      _id: "d059",
       name: "Mango Juice",
       category: "Drinks",
       subCategory: "Cold Beverages",
