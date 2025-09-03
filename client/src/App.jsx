@@ -3,10 +3,10 @@ import './App.css'
 import Navbar from './components/Navbar.jsx'
 import Home from './pages/Home.jsx'
 import AllProducts from './pages/AllProducts.jsx'
-import Cart from './pages/Cart.jsx'
 import ProductCategory from './pages/ProductCategory.jsx'
 import ProductDetails from './pages/ProductDetails.jsx'
 import Footer from './components/Footer.jsx'
+import CartPage from './pages/CartPage.jsx'
 
 function App() {
 
@@ -20,7 +20,7 @@ function App() {
             <Route path='/products/:category' element={<ProductCategory />} />
             <Route path='/products/:category/:subcategory' element={<ProductCategory />} />
             <Route path='/products/:category/:subcategory/:id' element={<ProductDetails />} />
-            <Route path='/cart' element={<Cart />} />
+            <Route path='/cart' element={<CartPage />} />
           </Routes>
         </div>
       <Footer />

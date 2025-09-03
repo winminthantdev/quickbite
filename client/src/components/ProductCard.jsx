@@ -2,10 +2,17 @@ import React from 'react'
 import { useNavigate } from 'react-router';
 import { assets } from '../assets/assets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../store/cartSlice';
 
 const ProductCard = ({product}) => {  
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () =>{
+    dispatch(addToCart(product));
+  };
 
   return (
     <div 
@@ -53,7 +60,7 @@ const ProductCard = ({product}) => {
           </div>
           
           {/* add to cart button */}
-          <div className="w-8 h-8 bg-green-500 flex justify-center items-center text-white rounded-full shadow absolute right-4 bottom-4">
+          <div className="w-8 h-8 bg-green-500 flex justify-center items-center text-white rounded-full shadow absolute right-4 bottom-4" onClick={(e)=>{e.stopPropagation(); handleAddToCart();}}>
             <FontAwesomeIcon icon="fa-solid fa-plus" />
           </div>
         </div>

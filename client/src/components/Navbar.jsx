@@ -50,7 +50,7 @@ const Navbar = () => {
                         <img src={assets.search_icon} alt="cart_icon" />
                     </div>
 
-                    <div className="relative cursor-pointer">
+                    <div className="relative cursor-pointer" onClick={()=>navigate('/cart')}>
                         <img src={assets.nav_cart_icon} alt='cart_icon' />
                         <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">5</button>
                     </div>
