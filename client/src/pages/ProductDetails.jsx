@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router';
 import { assets, dummyProducts } from '../assets/assets';
 import ProductCard from '../components/ProductCard';
 import Title from '../components/Title';
+import { addToCart } from '../store/cartSlice'
+import { useDispatch } from 'react-redux';
 
 const ProductDetails = () => {
   
@@ -10,12 +12,17 @@ const ProductDetails = () => {
     const [relatedProducts, setRelatedProducts] = useState([])
     const [thumbnail, setThumbnail] = useState(null);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const product = dummyProducts.find((item)=> item._id === id);
 
     if (!product) {
         return <p className="text-center py-20">Product not found.</p>;
     }
+
+    const handleAddToCart = () =>{
+        dispatch(addToCart(product));
+    };
 
 
     useEffect(()=>{
@@ -79,7 +86,7 @@ const ProductDetails = () => {
 
                     <div className="flex items-center mt-10 gap-4 text-base">
                         <button className="w-full py-3.5 cursor-pointer font-medium bg-gray-200/70 text-gray-800/80 hover:bg-gray-200 transition" 
-                            onClick={()=> addToCart(product._id)}
+                            onClick={()=>handleAddToCart(product._id)}
                         >
                             Add to Cart
                         </button>
