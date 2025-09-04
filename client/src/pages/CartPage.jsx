@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, removeFromCart, decreaseQuantity, clearCart, getCartItemsCount, totalPrice, updateCartItem, itemTotalPrice } from '../store/cartSlice'
 import { assets, dummyAddress } from '../assets/assets'
@@ -44,7 +44,9 @@ const CartPage = () => {
             <div key={index} className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3">
               <div className="flex items-center md:gap-6 gap-3">
                 <div className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded overflow-hidden">
-                  <img className="max-w-full h-full object-cover" src={product.image[0]} alt={product.name} />
+                  <img className="max-w-full h-full object-cover" src={product.image[0]} alt={product.name} 
+                     onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}/${product._id}`, scrollTo(0,0))}
+                  />
                 </div>
                 <div>
                   <p className="hidden md:block font-semibold">{product.name}</p>
@@ -67,7 +69,7 @@ const CartPage = () => {
               </div>
               <p className="text-center">${itemPrice}</p>
               <button className="cursor-pointer mx-auto" onClick={() => handleRemoveItem(product._id)}>
-                <img src={assets.refresh_icon} className='w-6 h-6 inline-block' alt="remove" />
+                <img src={assets.remove_icon} className='w-6 h-6 inline-block' alt="remove" />
               </button>
             </div>
           )

@@ -30,6 +30,7 @@ import banner_mobile_1 from "./banner_mobile_1.jpg"
 import banner_mobile_2 from "./banner_mobile_2.png"
 import banner_mobile_3 from "./banner_mobile_3.jpg"
 import banner_mobile_4 from "./banner_mobile_4.jpg"
+import shipping_address from "./shipping_address.svg"
 
 import chinese_food_image from './chinese_food_image.jpeg'
 import drinks_image from './drink.png'
@@ -162,6 +163,7 @@ export const assets = {
   banner_mobile_2,
   banner_mobile_3,
   banner_mobile_4,
+  shipping_address,
 
   chinese_food_image,
   burmese_food_image,

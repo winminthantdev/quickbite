@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
 const cartSlice = createSlice({
     name: "cart",
@@ -15,21 +16,28 @@ const cartSlice = createSlice({
             }else{
                 state.items.push({...item, quantity: 1});
             }
+            toast.success("Add to Cart")
+
 
         },
         removeFromCart: (state,action) => {
             state.items = state.items.filter((i)=>i._id !== action.payload)
+            toast.success("Remove From Cart")
         },
         decreaseQuantity: (state,action) => {
             const item = state.items.find((i)=>i.id === action.payload);
             if(item && item.quantity > 1){
                 item.quantity -= 1;
+                toast.success("Remove one item")
             }else{
                 state.items = state.items.filter((i)=> i.id !== action.payload);
+                toast.success("Remove one item")
             }
+
         },
         clearCart: (state) => {
             state.items = [];
+            toast.success("Remove Successfully")
         },
         updateCartItem: (state, action) => {
             const { _id, quantity } = action.payload;
@@ -38,6 +46,7 @@ const cartSlice = createSlice({
             if (item) {
                 item.quantity = quantity; 
             }
+            toast.success("Update Successfully")
         }
     },
 });
