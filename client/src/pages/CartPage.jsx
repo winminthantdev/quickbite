@@ -24,6 +24,15 @@ const CartPage = () => {
     dispatch(removeFromCart(id));
   }
 
+  const handleOrder = ()=>{
+    if(paymentOption === "COD"){
+      console.log("Ordered");
+    }else{
+      navigate('/payments')
+    }
+
+  }
+
   return (
     <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 pt-20 mx-auto">
       <div className='flex-1 max-w-4xl'>
@@ -44,7 +53,7 @@ const CartPage = () => {
             <div key={index} className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3">
               <div className="flex items-center md:gap-6 gap-3">
                 <div className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded overflow-hidden">
-                  <img className="max-w-full h-full object-cover" src={product.image[0]} alt={product.name} 
+                  <img className="max-w-full object-cover" src={product.image[0]} alt={product.name} 
                      onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}/${product._id}`, scrollTo(0,0))}
                   />
                 </div>
@@ -135,7 +144,7 @@ const CartPage = () => {
           </p>
         </div>
 
-        <button className="w-full py-3 mt-6 cursor-pointer bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition" onClick={()=> {paymentOption === "COD"  ? alert("Order placed successfully!") : navigate('/payments')}}>
+        <button className="w-full py-3 mt-6 cursor-pointer bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition" onClick={handleOrder}>
           {paymentOption === "COD" ? "Place Order" : "Proceed to Checkout"}
         </button>
       </div>

@@ -5,13 +5,20 @@ import { assets, dummyCategories, dummyProducts } from '../assets/assets';
 import { Link, useNavigate } from 'react-router';
 import { getCartItemsCount } from './../store/cartSlice';
 import { useSelector } from 'react-redux';
+import { useAppContext } from '../context/AppContext';
 
 const Navbar = () => {
 
+    const { navigate, searchQuery, setSearchQuery } = useAppContext();
+
     const [open, setOpen] = useState(false)
-    const navigate = useNavigate();
 
     const itemCount = useSelector(getCartItemsCount)
+
+    useEffect(()=>{
+        navigate('/products')
+    },[searchQuery])
+
 
 
     return (
@@ -50,7 +57,7 @@ const Navbar = () => {
                     ))}
 
                     <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
-                        <input className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500" type="text" placeholder="Search products" />
+                        <input className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500" type="text" placeholder="Search products" onChange={(e)=>setSearchQuery(e.target.value)} />
                         <img src={assets.search_icon} alt="cart_icon" />
                     </div>
 
