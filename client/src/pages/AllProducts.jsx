@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Title from '../components/Title'
 import ProductCard from '../components/ProductCard'
 import { dummyProducts } from '../assets/assets'

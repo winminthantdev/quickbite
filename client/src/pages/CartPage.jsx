@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, removeFromCart, decreaseQuantity, clearCart, getCartItemsCount, totalPrice, updateCartItem, itemTotalPrice } from '../store/cartSlice'
 import { assets, dummyAddress } from '../assets/assets'
 import { useNavigate } from 'react-router'
+import PopupModal from '../components/PopupModal'
 
 const CartPage = () => {
   const [showAddress, setShowAddress] = useState(false)
   const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0])
   const [paymentOption, setPaymentOption] = useState("COD");
+  const [showModal, setShowModal] = useState(false);
 
   const products = useSelector((state) => state.cart.items);
   const totalItems = useSelector(getCartItemsCount);
@@ -26,7 +28,7 @@ const CartPage = () => {
 
   const handleOrder = ()=>{
     if(paymentOption === "COD"){
-      console.log("Ordered");
+      setShowModal(true)
     }else{
       navigate('/payments')
     }
@@ -148,6 +150,8 @@ const CartPage = () => {
           {paymentOption === "COD" ? "Place Order" : "Proceed to Checkout"}
         </button>
       </div>
+      {/* Show Modal when true */}
+      {showModal && <PopupModal onClose={() => setShowModal(false)} />}
     </div>
   )
 }

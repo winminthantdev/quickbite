@@ -1,0 +1,39 @@
+import React from 'react'
+import { assets } from '../assets/assets'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
+
+const PopupModal = ({onClose}) => {
+
+  return (
+    <div className='w-full h-screen absolute top-0 left-0 bg-black/10 flex justify-center items-center z-999'>
+      <div className="w-[300px] md:w-[350px] relative flex flex-col items-center space-y-4 bg-white rounded-xl shadow-lg p-6">
+        <button type="button" className="absolute top-4 right-4 text-gray-500 hover:text-red-500 cursor-pointer transition" onClick={onClose}><FontAwesomeIcon icon={faXmark} /></button>
+        <video src={assets.success_gif} alt="" className="w-24" autoPlay muted loop={false} />
+        <div className="text-center">
+            <h2 className='font-bold text-lg'>Payment Success!</h2>
+            <p className='text-primary font-bold'>240000 MMK</p>
+        </div>
+        <div className="w-full flex flex-col space-y-2 text-sm md:text-md border-t border-gray-400/30 pt-4 mt-4">
+            <div className="flex justify-between text-gray-500">
+                <p>Order ID</p>
+                <p>123456789</p>
+            </div>
+            <div className="flex justify-between text-gray-500">
+                <p>Payment Method</p>
+                <p>Online</p>
+            </div>
+            <div className="flex justify-between text-gray-500">
+                <p>Payment Time</p>
+                <p>06/09/2025 10:45 AM</p>
+            </div>
+        </div>
+        <div className="w-full my-4">
+            <button type="button" className="w-full bg-primary rounded-lg text-white font-bold py-2" onClick={onClose}>New Order</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default PopupModal

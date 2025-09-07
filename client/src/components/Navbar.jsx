@@ -9,8 +9,8 @@ import { useAppContext } from '../context/AppContext';
 
 const Navbar = () => {
 
-    const { navigate, searchQuery, setSearchQuery } = useAppContext();
-
+    const { searchQuery, setSearchQuery } = useAppContext();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false)
 
     const itemCount = useSelector(getCartItemsCount)

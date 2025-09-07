@@ -10,6 +10,7 @@ import CartPage from './pages/CartPage.jsx'
 import AddAddress from './pages/AddAddress.jsx'
 import { Toaster } from 'react-hot-toast'
 import MyOrders from './pages/MyOrders.jsx'
+import PaymentPage from './pages/PaymentPage.jsx'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
             <Route path='/cart' element={<CartPage />} />
             <Route path='/add-address' element={<AddAddress />} />
             <Route path='/my-orders' element={<MyOrders />} />
+            <Route path='/payments' element={<PaymentPage />} />
           </Routes>
         </div>
       <Footer />

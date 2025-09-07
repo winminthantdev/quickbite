@@ -17,6 +17,7 @@ import white_arrow_icon from "./white_arrow_icon.svg";
 import clock_icon from "./clock.png";
 import delivery_icon from "./delivery.png";
 import plus_icon from "./plus.png";
+import success_gif from "./success.mp4";
 
 import play_store from './play_store.png'
 import app_store from './app_store.png'
@@ -150,6 +151,7 @@ export const assets = {
   clock_icon,
   delivery_icon,
   plus_icon,
+  success_gif,
 
   play_store,
   app_store,
