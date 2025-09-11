@@ -4,6 +4,7 @@ import { addToCart, removeFromCart, decreaseQuantity, clearCart, getCartItemsCou
 import { assets, dummyAddress } from '../assets/assets'
 import { useNavigate } from 'react-router'
 import PopupModal from '../components/PopupModal'
+import { createOrder } from '../services/api' 
 import toast from 'react-hot-toast'
 
 const CartPage = () => {
@@ -39,27 +40,18 @@ const handleOrder = async () => {
       };
 
       try {
-        // Send to backend
-        const response = await fetch("http://localhost:5000/api/orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(orderData),
-        });
+        const res = await createOrder(orderData);
+        toast.success("Order placed successfully!");
 
-        if (response.ok) {
-          toast.success("Order placed successfully!");
+        console.log("Saved Order:", res);
 
-          // Clear cart
-          dispatch(clearCart());
-          localStorage.removeItem("order");
+        // Clear cart
+        dispatch(clearCart());
+        localStorage.removeItem("order");
 
-          setShowModal(true);
-        } else {
-          toast.error("Failed to place order");
-        }
+        setShowModal(true);
       } catch (err) {
-        console.error(err);
-        toast.error("Error placing order");
+        toast.error("Failed to place order");
       }
     } else {
       toast.error("Your cart is empty!");

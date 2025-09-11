@@ -18,15 +18,10 @@ const request = async (endpoint, options = {}) => {
   }
 };
 
-// ✅ Products API
 export const fetchProducts = () => request("/api/products");
 
-// ✅ Footer Links API
 export const fetchFooterLinks = () => request("/api/footer-links");
 
-// ✅ Example: Add Order (POST)
-export const createOrder = (orderData) =>
-  request("/api/orders", {
-    method: "POST",
-    body: JSON.stringify(orderData),
-  });
+export const createOrder = (orderData) => {
+  localStorage.setItem('orders',JSON.stringify(orderData));
+}
