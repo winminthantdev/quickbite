@@ -6,17 +6,22 @@ import { Link, useNavigate } from 'react-router';
 import { getCartItemsCount } from './../store/cartSlice';
 import { useSelector } from 'react-redux';
 import { useAppContext } from '../context/AppContext';
+import Login from './Login';
 
 const Navbar = () => {
 
     const { searchQuery, setSearchQuery } = useAppContext();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false)
+    const [showModal, setShowModal] = useState(false);
+
 
     const itemCount = useSelector(getCartItemsCount)
 
     useEffect(()=>{
-        navigate('/products')
+        if(searchQuery.length > 0){
+            navigate('/products')
+        }
     },[searchQuery])
 
 
@@ -57,7 +62,7 @@ const Navbar = () => {
                     ))}
 
                     <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
-                        <input className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500" type="text" placeholder="Search products" onChange={(e)=>setSearchQuery(e.target.value)} />
+                        <input className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500" type="text" placeholder="Search products" onChange={(e)=> setSearchQuery(e.target.value)} />
                         <img src={assets.search_icon} alt="cart_icon" />
                     </div>
 
@@ -66,7 +71,7 @@ const Navbar = () => {
                         <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">{itemCount}</button>
                     </div>
 
-                    <button className="cursor-pointer px-4 py-2 bg-primary hover:bg-primary transition text-white rounded-full">
+                    <button className="cursor-pointer px-4 py-2 bg-primary hover:bg-primary transition text-white rounded-full" onClick={()=>setShowModal(true)}>
                         Login
                     </button>
                 </div>
@@ -77,7 +82,7 @@ const Navbar = () => {
                         <img src={assets.nav_cart_icon} className='w-6 opacity-80' alt="cart" />
                         <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">{itemCount}</button>
                     </div>
-                    <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="lg:hidden cursor-pointer">
+                    <button onClick={() => setOpen(!open)} aria-label="Menu" className="lg:hidden cursor-pointer">
                         <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-transform duration-500 ${open ? "rotate-[-45deg] translate-x-[-2px] translate-y-[9px]" : ""}`}></div>
                         <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-opacity duration-500 ${open ? "opacity-0" : ""}`}></div>
                         <div className={`w-[25px] h-[3px] bg-black rounded-lg m-[6px] transition-transform duration-500 ${open ? "rotate-[45deg] translate-x-[-2px] translate-y-[-9px]" : ""}`}></div>
@@ -88,13 +93,16 @@ const Navbar = () => {
                     <a href="#" className="block">Home</a>
                     <a href="#" className="block">About</a>
                     <a href="#" className="block">Contact</a>
-                    <button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary transition text-white rounded-full text-sm">
+                    <button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary transition text-white rounded-full text-sm" onClick={()=>setShowModal(true)}>
                         Login
                     </button>
                 </div>
 
             </nav>
+            {/* Show Modal when true */}
+            {showModal && <Login onClose={() => setShowModal(false)} />}
         </div>
+        
     )
 }
 

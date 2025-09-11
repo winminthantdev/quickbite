@@ -4,6 +4,7 @@ import { addToCart, removeFromCart, decreaseQuantity, clearCart, getCartItemsCou
 import { assets, dummyAddress } from '../assets/assets'
 import { useNavigate } from 'react-router'
 import PopupModal from '../components/PopupModal'
+import toast from 'react-hot-toast'
 
 const CartPage = () => {
   const [showAddress, setShowAddress] = useState(false)
@@ -26,14 +27,48 @@ const CartPage = () => {
     dispatch(removeFromCart(id));
   }
 
-  const handleOrder = ()=>{
-    if(paymentOption === "COD"){
-      setShowModal(true)
-    }else{
-      navigate('/payments')
-    }
+const handleOrder = async () => {
+  if (paymentOption === "COD") {
+    if (products.length > 0) {
+      const orderData = {
+        items: products,
+        address: selectedAddress,
+        paymentMethod: paymentOption,
+        totalAmount: (totalPrices + totalPrices * 0.02).toFixed(2),
+        createdAt: new Date().toISOString(),
+      };
 
+      try {
+        // Send to backend
+        const response = await fetch("http://localhost:5000/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData),
+        });
+
+        if (response.ok) {
+          toast.success("Order placed successfully!");
+
+          // Clear cart
+          dispatch(clearCart());
+          localStorage.removeItem("order");
+
+          setShowModal(true);
+        } else {
+          toast.error("Failed to place order");
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Error placing order");
+      }
+    } else {
+      toast.error("Your cart is empty!");
+    }
+  } else {
+    navigate("/payments");
   }
+};
+
 
   return (
     <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 pt-20 mx-auto">
@@ -92,7 +127,8 @@ const CartPage = () => {
         </button>
       </div>
 
-      <div className="max-w-[360px] w-full bg-gray-100/40 p-5 max-md:mt-16 border border-gray-300/70">
+      { products.length > 0 && 
+        <div className="max-w-[360px] w-full bg-gray-100/40 p-5 max-md:mt-16 border border-gray-300/70">
         <h2 className="text-xl md:text-xl font-medium">Order Summary</h2>
         <hr className="border-gray-300 my-5" />
 
@@ -146,10 +182,12 @@ const CartPage = () => {
           </p>
         </div>
 
-        <button className="w-full py-3 mt-6 cursor-pointer bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition" onClick={handleOrder}>
+        <button className="w-full py-3 mt-6 cursor-pointer bg-primary/90 rounded-lg text-white font-medium hover:bg-primary transition" onClick={handleOrder}>
           {paymentOption === "COD" ? "Place Order" : "Proceed to Checkout"}
         </button>
-      </div>
+          
+        </div>
+      }
       {/* Show Modal when true */}
       {showModal && <PopupModal onClose={() => setShowModal(false)} />}
     </div>

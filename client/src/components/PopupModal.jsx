@@ -2,8 +2,11 @@ import React from 'react'
 import { assets } from '../assets/assets'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router'
 
 const PopupModal = ({onClose}) => {
+
+  const navigate = useNavigate();
 
   return (
     <div className='w-full h-screen absolute top-0 left-0 bg-black/10 flex justify-center items-center z-999'>
@@ -29,7 +32,7 @@ const PopupModal = ({onClose}) => {
             </div>
         </div>
         <div className="w-full my-4">
-            <button type="button" className="w-full bg-primary rounded-lg text-white font-bold py-2" onClick={onClose}>New Order</button>
+            <button type="button" className="w-full bg-primary rounded-lg text-white font-bold cursor-pointer py-2" onClick={()=>navigate('/products'), onClose}>New Order</button>
         </div>
       </div>
     </div>
