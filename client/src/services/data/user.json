@@ -1,0 +1,14 @@
+[
+    {
+    "_id": 1,
+    "name": "David Chan",
+    "email": "david@quickbite.com",
+    "password": "test123",
+    "phone": "+1234567890",
+    "role": "user",
+    "address": "123 Main St, Mandalay, Myanmar",
+    "created_at" : "09/07/2025",
+    "updated_at" : "09/07/2025"
+    }
+
+]

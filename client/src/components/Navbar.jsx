@@ -7,6 +7,8 @@ import { getCartItemsCount } from './../store/cartSlice';
 import { useSelector } from 'react-redux';
 import { useAppContext } from '../context/AppContext';
 import Login from './Login';
+import { checkAuth, getUserInfo, logoutUser } from '../services/api';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
 
@@ -25,6 +27,10 @@ const Navbar = () => {
     },[searchQuery])
 
 
+    const handleSignout = () => {
+        logoutUser();
+        navigate("/")
+    }  
 
     return (
         <div className="fixed w-full border-b border-gray-300 bg-white z-1000">
@@ -71,9 +77,25 @@ const Navbar = () => {
                         <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">{itemCount}</button>
                     </div>
 
-                    <button className="cursor-pointer px-4 py-2 bg-primary hover:bg-primary transition text-white rounded-full" onClick={()=>setShowModal(true)}>
-                        Login
-                    </button>
+                    {!(checkAuth()) ?
+                        (<button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary transition text-white rounded-full text-sm" onClick={()=>setShowModal(true)}>
+                            Login
+                        </button>)
+                    :
+                        (<div className="relative w-8 h-8 group flex justify-center items-center bg-primary hover:bg-primary transition text-white rounded-full text-sm">
+                                <FontAwesomeIcon icon={faUser} className='cursor-pointer' />
+                                <div className="absolute -right-5 top-5 p-4">
+                                    <div className="border border-gray-300 rounded bg-white text-gray-500 p-4 hidden group-hover:flex">
+                                        <ul className='flex flex-col space-y-1 font-bold'>
+                                            <li className='cursor-pointer hover:text-black' onClick={()=>navigate("/my-account/user-info")}>{getUserInfo()?.userinfo?.name}</li>
+                                            <li className='cursor-pointer hover:text-black' onClick={()=>navigate("/my-account/user-info")}>{getUserInfo()?.userinfo?.email}</li>
+                                            <li className='cursor-pointer hover:text-black' onClick={()=>navigate("/my-account/orders")}>Order History</li>
+                                            <li className='cursor-pointer hover:text-red-500' onClick={()=>handleSignout()}>Sign Out</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                        </div>)
+                    }
                 </div>
 
                 {/* Mobile Menu */}
@@ -93,9 +115,20 @@ const Navbar = () => {
                     <a href="#" className="block">Home</a>
                     <a href="#" className="block">About</a>
                     <a href="#" className="block">Contact</a>
-                    <button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary transition text-white rounded-full text-sm" onClick={()=>setShowModal(true)}>
-                        Login
-                    </button>
+                    {!(checkAuth()) ?
+                        (<button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary transition text-white rounded-full text-sm" onClick={()=>setShowModal(true)}>
+                            Login
+                        </button>)
+                    :
+                        (<div className="w-full flex items-center border-t text-gray-500 pt-4 text-sm">
+                            <ul className='flex flex-col space-y-1 font-bold'>
+                                <li className='cursor-pointer hover:text-black' onClick={()=>navigate("/my-account/user-info")}>{getUserInfo()?.userinfo?.name}</li>
+                                <li className='cursor-pointer hover:text-black' onClick={()=>navigate("/my-account/user-info")}>{getUserInfo()?.userinfo?.email}</li>
+                                <li className='cursor-pointer hover:text-black' onClick={()=>navigate("/my-account/orders")}>Order History</li>
+                                <li className='cursor-pointer hover:text-red-500' onClick={()=>handleSignout()}>Sign Out</li>
+                            </ul>
+                        </div>)
+                    }
                 </div>
 
             </nav>

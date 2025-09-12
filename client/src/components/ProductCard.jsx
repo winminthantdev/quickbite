@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
 import { assets } from '../assets/assets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,9 +9,10 @@ const ProductCard = ({product}) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
 
   const handleAddToCart = () =>{
-    dispatch(addToCart(product));
+      dispatch(addToCart(product));   
   };
 
   return (

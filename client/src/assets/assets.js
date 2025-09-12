@@ -769,7 +769,6 @@ export const dummyAddress = [
   },
 ];
 
-
 export const dummyOrders = [
   {
     _id: "67e2589a8f87e63366786400",
