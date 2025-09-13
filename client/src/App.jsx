@@ -1,4 +1,4 @@
-import { Routes,Route } from 'react-router'
+import { Routes,Route, Navigate } from 'react-router'
 import './App.css'
 import Navbar from './components/Navbar.jsx'
 import Home from './pages/Home.jsx'
@@ -11,9 +11,13 @@ import AddAddress from './pages/AddAddress.jsx'
 import { Toaster } from 'react-hot-toast'
 import MyOrders from './pages/MyOrders.jsx'
 import PaymentPage from './pages/PaymentPage.jsx'
+import { checkAuth } from './services/api.js'
 
 function App() {
 
+  const PrivateRoute = ({ element }) => {
+    return checkAuth() ? element : <Navigate to="/" />;
+  };
   return (
     <div className='flex flex-col min-h-screen'>
       <Navbar />
@@ -26,9 +30,11 @@ function App() {
             <Route path='/products/:category/:subcategory' element={<ProductCategory />} />
             <Route path='/products/:category/:subcategory/:id' element={<ProductDetails />} />
             <Route path='/cart' element={<CartPage />} />
-            <Route path='/add-address' element={<AddAddress />} />
-            <Route path='/my-orders' element={<MyOrders />} />
-            <Route path='/payments' element={<PaymentPage />} />
+
+            <Route path="/my-account/add-address" element={<PrivateRoute element={<AddAddress />} />} />
+            <Route path="/my-account/orders" element={<PrivateRoute element={<MyOrders />} />} />
+            <Route path="/my-account/payments" element={<PrivateRoute element={<PaymentPage />} />} />
+
           </Routes>
         </div>
       <Footer />

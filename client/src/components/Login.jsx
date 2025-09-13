@@ -40,7 +40,17 @@ const Login = ({ onClose }) => {
                     <a className="text-sm" href="#">Forgot password?</a>
                 </div>
                 <button type="submit" className="mt-2 w-full h-11 rounded-full text-white bg-primary hover:opacity-90 transition-opacity cursor-pointer"> Login </button> 
-                <p className="text-gray-500 text-sm mt-3 mb-11">Don’t have an account? <a className="text-indigo-500" href="#">Sign up</a></p> 
+                <p className="text-gray-500 text-sm mt-3 mb-4">Don’t have an account? <a className="text-indigo-500" href="#">Sign up</a></p> 
+                <div className="text-gray-500 text-xs mb-3">
+                    <div className='flex justify-between'>
+                        <span>email : david@quickbite.com</span>
+                        <span>password : test123</span>
+                    </div>
+                    <div className='flex justify-between'>
+                        <span>Email : mrchan@quickbite.com</span>
+                        <span>password : test123</span>
+                    </div>
+                </div>
             </form> 
         </div>
     )

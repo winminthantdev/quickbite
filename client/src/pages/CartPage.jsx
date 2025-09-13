@@ -37,7 +37,7 @@ const CartPage = () => {
       if (paymentOption === "COD") {
         if (products.length > 0) {
           const orderData = {
-            items: products.map(item => ({ _id: item._id, name: item.name, price: item.price, quantity: item.quantity })),
+            items: products,
             address: selectedAddress,
             paymentMethod: paymentOption,
             totalAmount: (totalPrices + totalPrices * 0.02).toFixed(2),
@@ -71,20 +71,6 @@ const CartPage = () => {
 
   };
 
-  // if(products.length === 0) {
-  //   return (
-  //     <div className="w-full h-[60vh] flex justify-center items-center py-16 max-w-6xl px-6 pt-20 mx-auto">
-  //       <div className="text-center">
-  //         <h1 className='text-xl font-bold mb-5'>Your shopping cart is empyt</h1>
-  //         <button className="w-full cursor-pointer flex justify-center text-primary gap-2 font-medium" onClick={() => navigate("/products")}>
-  //             <img src={assets.arrow_right_icon_colored} alt="back-arrow" />
-  //             Start Shopping
-  //         </button>
-  //       </div>
-  //     </div>
-  //   )
-  // }
-
   return (
     <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 pt-20 mx-auto">
       <div className='flex-1 max-w-4xl'>
@@ -94,9 +80,9 @@ const CartPage = () => {
 
         {
           products.length === 0 && (
-            <div className="w-full h-[60vh] flex justify-center items-center py-16 max-w-6xl px-6 pt-20 mx-auto">
+            <div className="w-full h-[50vh] flex justify-center items-center py-16 max-w-6xl px-6 pt-20 mx-auto">
               <div className="text-center">
-                <h1 className='text-xl font-bold mb-5'>Your shopping cart is empyt</h1>
+                <h1 className='text-xl font-bold mb-5'>Your shopping cart is empty</h1>
                 <button className="w-full cursor-pointer flex justify-center text-primary gap-2 font-medium" onClick={() => navigate("/products")}>
                   <img src={assets.arrow_right_icon_colored} alt="back-arrow" />
                   Start Shopping

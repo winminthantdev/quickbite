@@ -35,6 +35,10 @@ export const fetchProducts = async () => {
   );
 };
 
+export const fetchProductsById = async (id) => {
+  const products = products.filter(product=> product._id === id) || [];
+  return products;
+};
 
 
 // ------- END FETCH DATA --------
@@ -122,5 +126,7 @@ export const fetchUserOrders = () => {
   if (!auth?.userid) return [];
 
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
-  return orders;
+  const userorders = orders.filter(order=>order.userId === auth.userid)
+  return userorders;
 };
+
