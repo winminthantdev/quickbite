@@ -5,11 +5,19 @@ import { fetchProducts } from '../services/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
+// Swiper imports
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+
 const BestSeller = () => {
   const sectionRef = useRef(null);
   const [products, setProducts] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+
+    // intersection animation
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,6 +39,8 @@ const BestSeller = () => {
       }
     };
   }, []);
+
+    // fetch products
 
   useEffect(() => {
     // Fetch products
@@ -59,23 +69,33 @@ const BestSeller = () => {
       className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-50'}`}
     >
       <Title title="Best Seller" />
-      <div className='flex gap-3 overflow-x-auto scrollbar-hide mt-6'>
-        {loading ? (
-          <p className="text-center py-8 text-gray-500">
-            <FontAwesomeIcon spin icon={faSpinner} className='me-2' /> Loading products...
-          </p>
+      {loading ? (
+        <p className="text-center py-8 text-gray-500">
+          <FontAwesomeIcon spin icon={faSpinner} className='me-2' /> Loading products...
+        </p>
+      ) : (
+        products.length > 0 ? (
+          <Swiper
+            modules={[Navigation]}
+            navigation
+            slidesPerView="auto"   
+            spaceBetween={12}       
+            className="mt-6"
+          >
+            {products.map((product) => (
+              <SwiperSlide key={product._id} className="!w-auto"> 
+                {/* !w-auto = keep natural card width */}
+                <ProductCard product={product} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
         ) : (
-          products.length > 0 ? (
-            products.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))
-          ) : (
-            <p className="col-span-full text-center text-gray-500 py-8">
-              No products found.
-            </p>
-          )
-        )}
-      </div>
+          <p className="col-span-full text-center text-gray-500 py-8">
+            No products found.
+          </p>
+        )
+      )}
     </div>
   );
 };
