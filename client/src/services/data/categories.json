@@ -1,0 +1,30 @@
+{
+  "Drinks": [
+    "Whisky",
+    "Vodka",
+    "Gin",
+    "Rum",
+    "Beer",
+    "Tequila",
+    "Hot Beverages",
+    "Soft Drinks",
+    "Cold Beverages"
+  ],
+  "Thai": [
+    "Noodles",
+    "Soups",
+    "Curries"
+  ],
+  "Burmese": [
+    "Curries",
+    "Noodles"
+  ],
+  "Chinese": [
+    "Classic Entrees",
+    "Rice Dishes",
+    "Noodles",
+    "Appetizers",
+    "Soups",
+    "Main Dishes"
+  ]
+}

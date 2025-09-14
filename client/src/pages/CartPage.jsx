@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToCart, removeFromCart, decreaseQuantity, clearCart, getCartItemsCount, totalPrice, updateCartItem, itemTotalPrice } from '../store/cartSlice'
-import { assets, dummyAddress } from '../assets/assets'
+import { addToCart, removeFromCart, clearCart, getCartItemsCount, totalPrice, updateCartItem, itemTotalPrice } from '../store/cartSlice'
+import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router'
 import PopupModal from '../components/PopupModal'
 import { checkAuth, createOrder } from '../services/api'
@@ -10,7 +10,7 @@ import Login from '../components/Login'
 
 const CartPage = () => {
   const [showAddress, setShowAddress] = useState(false)
-  const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0])
+  const [selectedAddress, setSelectedAddress] = useState([])
   const [paymentOption, setPaymentOption] = useState("COD");
   const [showModal, setShowModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false)

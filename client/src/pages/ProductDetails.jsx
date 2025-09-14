@@ -1,20 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router';
-import { assets, dummyProducts } from '../assets/assets';
+import { assets } from '../assets/assets';
 import ProductCard from '../components/ProductCard';
 import Title from '../components/Title';
 import { addToCart } from '../store/cartSlice'
 import { useDispatch } from 'react-redux';
+import { fetchProducts } from '../services/api';
 
 const ProductDetails = () => {
   
     const {id} = useParams()
     const [relatedProducts, setRelatedProducts] = useState([])
+    const [product, setProduct] = useState(null);
     const [thumbnail, setThumbnail] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const product = dummyProducts.find((item)=> item._id === id);
+    useEffect(()=>{
+        const getproducts = async () => {
+            setLoading(true);
+            try {
+                const allProducts = await fetchProducts();
+                const product = (allProducts || []).find((item)=> item._id === id)
+                setProduct(product);
+                setLoading(false)
+            } catch (error) {
+                console.error("Failed to fetch products:", error)
+                setPromotions([])
+                setLoading(false)
+            }finally{
+                setLoading(false)
+            }
+        }
+        getproducts()
+    },[])
 
     if (!product) {
         return <p className="text-center py-20">Product not found.</p>;
@@ -24,10 +44,9 @@ const ProductDetails = () => {
         dispatch(addToCart(product));
     };
 
-
     useEffect(()=>{
-        if(dummyProducts.length > 0){
-            const productsCopy = dummyProducts.filter((item)=> product.subCategory === item.subCategory && product._id !== item._id)
+        if(fetchProducts().length > 0){
+            const productsCopy = fetchProducts().filter((item)=> product.subCategory === item.subCategory && product._id !== item._id)
             setRelatedProducts(productsCopy.slice(0,5))
         }
     },[product])    

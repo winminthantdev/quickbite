@@ -24,6 +24,7 @@ const request = async (endpoint, options = {}) => {
 
 import users from "./data/user.json";
 import products from "./data/products.json";
+import categories from "./data/categories.json";
 
 // ------- PRODUCTS --------
 
@@ -38,6 +39,18 @@ export const fetchProducts = async () => {
 export const fetchProductsById = async (id) => {
   const products = products.filter(product=> product._id === id) || [];
   return products;
+};
+
+// ------- CATEGORIES --------
+
+export const fetchCategories = async () => {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      const all = Object.values(categories).flat();
+      const unique = [...new Set(all)];
+      resolve(unique);
+    })
+  );
 };
 
 
