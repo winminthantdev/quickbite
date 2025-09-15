@@ -32,7 +32,7 @@ export const fetchProducts = async () => {
   return new Promise((resolve) =>
     setTimeout(() => {
       resolve(products);
-    }, 500)
+    })
   );
 };
 
@@ -55,6 +55,7 @@ export const fetchCategories = async () => {
 
 
 // ------- END FETCH DATA --------
+
 
 // ------- START AUTH  --------
 export const loginUser = (email, password) => {
