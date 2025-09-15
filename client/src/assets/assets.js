@@ -33,11 +33,6 @@ import banner_mobile_3 from "./banner_mobile_3.jpg"
 import banner_mobile_4 from "./banner_mobile_4.jpg"
 import shipping_address from "./shipping_address.svg"
 
-import chinese_food_image from './chinese_food_image.jpeg'
-import drinks_image from './drink.png'
-import burmese_food_image from './burmesefood.jpg'
-import thai_food_image from './thaifood.jpg'
-
 
 export const assets = {
   logo,
@@ -74,38 +69,7 @@ export const assets = {
   banner_mobile_3,
   banner_mobile_4,
   shipping_address,
-
-  chinese_food_image,
-  burmese_food_image,
-  thai_food_image,
-  drinks_image,
 };
-
-
-
-// Category datas
-export const dummyCategories = [
-  {
-    "text": "Chinese Food",
-    "path": "Chinese",
-    "image": chinese_food_image,
-  },
-  {
-    "text": "Thai Food",
-    "path": "Thai",
-    "image": thai_food_image,
-  },
-  {
-    "text": "Burmese Food",
-    "path": "Burmese",
-    "image": burmese_food_image,
-  },
-  {
-    "text": "Drinks",
-    "path": "Drinks",
-    "image": drinks_image,
-  }
-];
 
 
 // Footer Links
