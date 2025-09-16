@@ -173,20 +173,7 @@ const Navbar = () => {
                         <div key={idx} className="flex flex-col w-full">
                             <Link to={`/products/${cat.path.toLowerCase()}`} className="block py-2">
                                 {cat.text}
-                            </Link>
-                            {cat.subcategories && (
-                                <div className="pl-4 flex flex-col">
-                                    {cat.subcategories.map((sub, subIdx) => (
-                                        <Link 
-                                            key={subIdx} 
-                                            to={`/products/${cat.path.toLowerCase()}/${sub.toLowerCase()}`} 
-                                            className="py-1 text-gray-500"
-                                        >
-                                            {sub}
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
+                            </Link>       
                         </div>
                     ))}
 
