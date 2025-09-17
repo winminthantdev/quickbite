@@ -32,6 +32,9 @@ import banner_mobile_2 from "./banner_mobile_2.png"
 import banner_mobile_3 from "./banner_mobile_3.jpg"
 import banner_mobile_4 from "./banner_mobile_4.jpg"
 import shipping_address from "./shipping_address.svg"
+import mpu_card from "./mpu_card.png"
+import visa_card from "./visa_card.png"
+import master_card from "./master_card.png"
 
 
 export const assets = {
@@ -69,6 +72,10 @@ export const assets = {
   banner_mobile_3,
   banner_mobile_4,
   shipping_address,
+
+  master_card,
+  visa_card,
+  mpu_card
 };
 
 
