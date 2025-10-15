@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { assets } from '../assets/assets';
+import toast from 'react-hot-toast';
 
 const PaymentPage = () => {
   const [cardNumber, setCardNumber] = useState("");
@@ -27,30 +28,40 @@ const PaymentPage = () => {
     setCardType(detectCardType(value));
   };
 
-   const handleOrder = async () => {
-    try {
-      const res = await axios.post("http://localhost:5000/api/payment", {
-        cardName,
-        cardNumber,
-        expiry,
-        cvc,
-        saveCard,
-        cardType,
-        orderSummary: {
-          items: [{ name: "Item1", qty: 1, price: 40000 }],
-          subtotal: 40000,
-          shipping: 40000,
-          tax: 40000,
-          total: 120000,
-        },
-      });
+  const handleOrder = async () => {
+    if (!checkAuth()) {
+      toast.error("Please login to order");
+      navigate("/login");
+      return;
+    }
 
-      alert("✅ Order placed: " + res.data.message);
-    } catch (error) {
-      console.error(error);
-      alert("❌ Payment failed!");
+    if (products.length === 0) {
+      toast.error("Your cart is empty!");
+      return;
+    }
+
+    const orderData = {
+      items: products,
+      address: "Billing Address", 
+      paymentMethod: "Online",
+      totalAmount: (totalPrices + totalPrices * 0.02).toFixed(2),
+    };
+
+    try {
+      const res = await createOrder(orderData);
+      if (res.success) {
+        toast.success("Order placed successfully!");
+        localStorage.removeItem("order");
+        dispatch(clearCart());
+        navigate("/my-account/orders");
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err) {
+      toast.error("Payment failed!");
     }
   };
+
   return (
     <div className="container text-gray-500 mx-auto px-4 md:px-0 py-4 pt-28">
       <div className="grid lg:grid-cols-2 gap-8">
