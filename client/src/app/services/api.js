@@ -40,6 +40,22 @@ export const fetchProductsById = async (id) => {
   return products;
 };
 
+export const searchProducts = async (query) => {
+  if (!query) return [];
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const filtered = products.filter((product) =>
+        product.name.toLowerCase().includes(query.toLowerCase()) ||
+        product.category.toLowerCase().includes(query.toLowerCase()) ||
+        product.subCategory.toLowerCase().includes(query.toLowerCase()) 
+      );
+      resolve(filtered);
+    }, 300);
+  });
+};
+
+
 // ------- CATEGORIES --------
 
 export const fetchCategories = async () => {
