@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { assets } from '../assets/assets'
+import { assets } from '@/assets/assets'
 
 const InputField = (({ type, placeholder, name, handleChange, address })=>(
     <input type={type} name={name} id={name} className='w-full border border-gray-500/30 rounded outline-none text-gray-500 focus:border-primary transition px-2 py-2.5' value={address[name]} placeholder={placeholder} onChange={handleChange} required />

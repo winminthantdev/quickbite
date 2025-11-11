@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'; 
-import { assets } from '../assets/assets';
-import ProductCard from '../components/ProductCard';
-import Title from '../components/Title';
-import { addToCart } from '../store/cartSlice'
+import { assets } from '@/assets/assets';
+import ProductCard from '@/components/ui/ProductCard';
+import Title from '@/components/ui/Title';
+import { addToCart } from '@/store/cartSlice'
 import { useDispatch } from 'react-redux';
-import { fetchProducts } from '../services/api';
+import { fetchProducts } from '@/services/api';
 
 const ProductDetails = () => {
     const { id } = useParams();

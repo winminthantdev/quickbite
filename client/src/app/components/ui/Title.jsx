@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
-import AllProducts from '../../pages/AllProducts'
+import AllProducts from '@/features/user/pages/AllProducts'
 import { useNavigate } from 'react-router'
 
 const Title = ({title}) => {

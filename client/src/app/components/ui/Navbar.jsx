@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import logo from '../assets/logo.svg';
+import logo from '@/assets/logo.svg';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { assets } from '../../assets/assets';
+import { assets } from '@/assets/assets';
 import { Link, useNavigate } from 'react-router';
-import { getCartItemsCount } from '../../store/cartSlice';
+import { getCartItemsCount } from '@/store/cartSlice';
 import { useSelector } from 'react-redux';
-import { useAppContext } from '../../context/AppContext';
-import Login from './Login';
-import { checkAuth, getUserInfo, logoutUser } from '../../services/api';
+import Login from '@/components/ui/Login';
+import { checkAuth, getUserInfo, logoutUser } from '@/services/api';
 import { faUser, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { fetchCategories } from '../../services/api'; 
+import { fetchCategories } from '@/services/api'; 
 
-const Navbar = () => {
-    const { searchQuery, setSearchQuery } = useAppContext();
+const Navbar = ({}) => {
+    const { searchQuery, setSearchQuery } = useState("");
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -29,11 +28,6 @@ const Navbar = () => {
         loadCategories();
     }, []);
 
-    useEffect(() => {
-        if (searchQuery.length > 0) {
-            navigate('/products');
-        }
-    }, [searchQuery, navigate]);
 
     const handleSignout = () => {
         logoutUser();

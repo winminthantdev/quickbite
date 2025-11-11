@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import Title from '../components/Title'
-import ProductCard from '../components/ProductCard'
-import { useAppContext } from '../context/AppContext'
-import { fetchProducts } from '../services/api'
+import Title from '@/components/ui/Title'
+import ProductCard from '@/components/ui/ProductCard'
+import { useAppContext } from '@/context/AppContext'
+import { fetchProducts } from '@/services/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 

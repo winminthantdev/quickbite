@@ -1,9 +1,9 @@
 import React from 'react'
-import MainBanner from '../components/MainBanner'
-import Category from '../components/Category'
-import BestSeller from '../components/BestSeller'
-import Promotion from '../components/Promotion'
-import CtaSection from '../components/CtaSection'
+import MainBanner from '@/components/ui/MainBanner'
+import Category from '@/components/ui/Category'
+import BestSeller from '@/components/ui/BestSeller'
+import Promotion from '@/components/ui/Promotion'
+import CtaSection from '@/components/ui/CtaSection'
 
 const Home = () => {
   return (

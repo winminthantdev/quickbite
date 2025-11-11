@@ -1,5 +1,4 @@
 const BASE_URL = import.meta.env.VITE_API_URL;
-import { v4 as uuid4 } from "uuid";
 
 const request = async (endpoint, options = {}) => {
   try {

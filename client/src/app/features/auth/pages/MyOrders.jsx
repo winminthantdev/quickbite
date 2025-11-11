@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import Title from '../components/Title'
+import Title from '@/components/ui/Title'
 import { useNavigate } from 'react-router';
-import { fetchProductsById, fetchUserOrders } from '../services/api';
+import { fetchProductsById, fetchUserOrders } from '@/services/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { assets } from '../assets/assets';
+import { assets } from '@/assets/assets';
 
 const MyOrders = () => {
   const [myOrders, setMyOrders] = useState([]);

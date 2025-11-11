@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToCart, removeFromCart, clearCart, getCartItemsCount, totalPrice, updateCartItem, itemTotalPrice } from '../store/cartSlice'
-import { assets } from '../assets/assets'
+import { addToCart, removeFromCart, clearCart, getCartItemsCount, totalPrice, updateCartItem, itemTotalPrice } from '@/store/cartSlice'
+import { assets } from '@/assets/assets'
 import { useNavigate } from 'react-router'
-import PopupModal from '../components/PopupModal'
-import { checkAuth, createOrder } from '../services/api'
+import PopupModal from '@/components/ui/PopupModal'
+import { checkAuth, createOrder } from '@/services/api'
 import toast from 'react-hot-toast'
-import Login from '../components/Login'
+import Login from '@/components/ui/Login'
 
 const CartPage = () => {
   const [showAddress, setShowAddress] = useState(false)
