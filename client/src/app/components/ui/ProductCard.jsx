@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
-import { assets } from '../../assets/assets';
+import { assets } from '@/assets/assets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../../store/cartSlice';
+import { addToCart } from '@/store/cartSlice';
 
 const ProductCard = ({product}) => {  
 

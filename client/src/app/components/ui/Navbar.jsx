@@ -240,8 +240,8 @@ const Navbar = () => {
 
             {/* Show Search Items Result */}
             {searchItem && (
-                <div className="absolute top-[75px] left-1/2 transform -translate-x-1/2 w-2/3 max-w-md bg-white border border-gray-200 shadow-lg rounded-xl z-[2000]">
-                    <div className="max-h-[350px] overflow-y-auto">
+                <div className="hidden lg:flex absolute top-[75px] right-3 transform -translate-x-1/2 w-2/3 max-w-md bg-white border border-gray-200 shadow-lg rounded-xl z-[2000]">
+                    <div className="w-full max-h-[350px] overflow-y-auto">
                         {ResultLoading ? (
                             <div className="p-6 text-center text-gray-500 text-sm">Loading...</div>
                         ) : searchResults.length > 0 ? (
