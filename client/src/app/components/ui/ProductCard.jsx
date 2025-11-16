@@ -15,7 +15,7 @@ const ProductCard = ({product}) => {
       dispatch(addToCart(product));   
   };
 
-  return (
+  return (    
     <div 
         key={`${product._id}`}
         className="group w-full min-w-[250px] max-w-[300px] flex-shrink-0 relative flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md cursor-pointer my-4"
