@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Title from './Title'
 import ProductCard from './ProductCard'
-import { fetchProducts } from '../../services/api'   
+import { fetchProducts } from '@/services/api'   
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
@@ -62,12 +62,16 @@ const Promotion = () => {
     getPromotions()
   }, [])
 
+  const handleSeeAllBtn = () => {
+    console.log("YOU ARE CLICKING SEE ALL ...");
+  }
+
   return (
     <div
       ref={sectionRef}
       className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-0'}`}
     >
-      <Title title="Promos for this Month" />
+      <Title title="Promos for this Month" clickSeeAll={handleSeeAllBtn} />
 
       {loading ? (
         <p className="text-center py-8 text-gray-500">
