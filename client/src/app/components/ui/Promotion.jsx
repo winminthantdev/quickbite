@@ -9,12 +9,15 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
+import { useNavigate } from 'react-router'
 
 const Promotion = () => {
   const sectionRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
   const [promotions, setPromotions] = useState([])
   const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate();
 
     // intersection animation
 
@@ -64,6 +67,8 @@ const Promotion = () => {
 
   const handleSeeAllBtn = () => {
     console.log("YOU ARE CLICKING SEE ALL ...");
+
+    navigate('/products/promotions', {state: {products: promotions}})
   }
 
   return (

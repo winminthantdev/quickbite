@@ -33,7 +33,7 @@ const ProductCard = ({product}) => {
         <div className="aspect-[16/9] overflow-hidden">
           <img 
             src={product.image[0]}
-            className="w-full h-full object-cover transition duration-300 group-hover:scale-110" 
+            className="w-full h-full object-contain transition duration-300 group-hover:scale-110" 
             alt={product.name} 
           />
         </div>
