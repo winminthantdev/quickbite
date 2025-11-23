@@ -5,12 +5,15 @@ import { useAppContext } from '@/context/AppContext'
 import { fetchProducts } from '@/services/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import Pagination from '../../../components/ui/Pagination'
 
 const AllProducts = () => {
-  const { searchQuery } = useAppContext();
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  
+
+  const PAGESIZE = 10;
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -22,16 +25,8 @@ const AllProducts = () => {
     loadProducts();
   }, []);
 
-  useEffect(() => {
-    const query = typeof searchQuery === 'string' ? searchQuery.toLowerCase() : '';
-    if (query) {
-      setFilteredProducts(
-        products.filter(product => product.name.toLowerCase().includes(query))
-      );
-    } else {
-      setFilteredProducts(products);
-    }
-  }, [searchQuery, products]);
+    const totalPages = Math.max(1, Math.ceil(products.length/PAGESIZE));
+    const pageItems = products.slice((page-1) * PAGESIZE,page * PAGESIZE)  
 
   return (
     <div className='container mx-auto px-8 md:px-0 py-4 pt-20'>
@@ -40,8 +35,8 @@ const AllProducts = () => {
         loading ? (<p className="text-center mt-20"><FontAwesomeIcon spin icon={faSpinner} className='me-2' />Loading products...</p>) : 
         (
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 place-items-center mt-6'>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map(product => (
+            {pageItems.length > 0 ? (
+              pageItems.map(product => (
                 <ProductCard key={product._id} product={product} />
               ))
             ) : (
@@ -52,6 +47,15 @@ const AllProducts = () => {
           </div>
         )
       }
+      {totalPages >  1 && (
+        <Pagination 
+          totalPages = {totalPages}
+          curPage = {page}
+          preBtn = {()=>setPage((curpage)=>Math.max(1,curpage - 1))}
+          nextBtn = {()=>setPage((curpage)=>Math.min(totalPages,curpage + 1))}
+          onPageChange = {(selectedPage)=>setPage(selectedPage)}
+        />
+      )}
     </div>
   );
 }

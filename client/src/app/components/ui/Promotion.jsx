@@ -19,7 +19,6 @@ const Promotion = () => {
 
   const navigate = useNavigate();
 
-    // intersection animation
 
   useEffect(() => {
     const observer = new IntersectionObserver(

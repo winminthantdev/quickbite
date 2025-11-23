@@ -10,6 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { useNavigate } from 'react-router';
 
 const BestSeller = () => {
   const sectionRef = useRef(null);
@@ -17,7 +18,7 @@ const BestSeller = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-    // intersection animation
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -63,12 +64,18 @@ const BestSeller = () => {
     getProducts();
   }, []);
 
+  const handleSeeAllBtn = () => {
+    console.log("YOU ARE CLICKING SEE ALL ...");
+
+    navigate('/products/bestsellers', {state: {products: products}})
+  }
+
   return (
     <div
       ref={sectionRef}
       className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-50'}`}
     >
-      <Title title="Best Seller" />
+      <Title title="Best Seller"  clickSeeAll={handleSeeAllBtn} />
       {loading ? (
         <p className="text-center py-8 text-gray-500">
           <FontAwesomeIcon spin icon={faSpinner} className='me-2' /> Loading products...
@@ -84,7 +91,6 @@ const BestSeller = () => {
           >
             {products.map((product) => (
               <SwiperSlide key={product._id} className="!w-auto"> 
-                {/* !w-auto = keep natural card width */}
                 <ProductCard product={product} />
               </SwiperSlide>
             ))}

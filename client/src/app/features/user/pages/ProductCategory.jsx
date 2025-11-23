@@ -51,7 +51,7 @@ const ProductCategory = () => {
   }, [category, subcategory]);
 
   const totalPages = Math.max(1, Math.ceil(products.length/PAGESIZE));
-  const totalItems = products.slice((page-1) * PAGESIZE,page * PAGESIZE)  
+  const pageItems = products.slice((page-1) * PAGESIZE,page * PAGESIZE)  
 
   return (
     <div className='container overflow-hidden mx-auto px-8 md:px-0 py-4 pt-20'>
@@ -71,8 +71,8 @@ const ProductCategory = () => {
         <p className="text-center py-8 text-gray-500"><FontAwesomeIcon spin icon={faSpinner} className='me-2' />Loading products...</p>
       ) : (
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 place-items-center overflow-x-auto scrollbar-hide mt-6'>
-          {totalItems.length > 0 ? (
-            totalItems.map((product) => (
+          {pageItems.length > 0 ? (
+            pageItems.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))
           ) : (
@@ -82,8 +82,14 @@ const ProductCategory = () => {
           )}
         </div>
       )}
-      {totalPages.length > 1 && (
-        <Pagination />
+      {totalPages >  1 && (
+        <Pagination 
+          totalPages = {totalPages}
+          curPage = {page}
+          preBtn = {()=>setPage((curpage)=>Math.max(1,curpage - 1))}
+          nextBtn = {()=>setPage((curpage)=>Math.min(totalPages,curpage + 1))}
+          onPageChange = {(selectedPage)=>setPage(selectedPage)}
+        />
       )}
     </div>
   );
