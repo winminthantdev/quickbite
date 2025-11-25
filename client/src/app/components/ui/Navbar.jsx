@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router';
 import { getCartItemsCount } from '@/store/cartSlice';
 import { useSelector } from 'react-redux';
 import Login from '@/components/ui/Login';
-import { checkAuth, getUserInfo, logoutUser } from '@/services/api';
+import { checkAuth, getUserInfo, logoutUser } from '@/services/authService';
 import { faUser, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { fetchCategories, searchProducts } from '@/services/api';
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { loginUser } from '../../services/api'
 import toast from 'react-hot-toast'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { loginUser } from '../../services/authService'
 
 const Login = ({ onClose }) => {
     const [email, setEmail] = useState("")

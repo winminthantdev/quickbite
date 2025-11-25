@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import { assets } from '@/assets/assets';
 import toast from 'react-hot-toast';
+import { checkAuth } from '../../../services/authService';
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router';
 
 const PaymentPage = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [cardType, setCardType] = useState(""); 
+
+  const location = useLocation();
+
+  const orderDatas = location.state.orderData;  
+  const products = orderDatas.items;
 
   const cardList = [
     { type: "visa", src: assets.visa_card },
@@ -35,20 +43,8 @@ const PaymentPage = () => {
       return;
     }
 
-    if (products.length === 0) {
-      toast.error("Your cart is empty!");
-      return;
-    }
-
-    const orderData = {
-      items: products,
-      address: "Billing Address", 
-      paymentMethod: "Online",
-      totalAmount: (totalPrices + totalPrices * 0.02).toFixed(2),
-    };
-
     try {
-      const res = await createOrder(orderData);
+      const res = await createOrder(orderDatas);
       if (res.success) {
         toast.success("Order placed successfully!");
         localStorage.removeItem("order");
@@ -61,6 +57,14 @@ const PaymentPage = () => {
       toast.error("Payment failed!");
     }
   };
+
+  const subtotal = products.reduce((total, p) => total + p.price * p.quantity, 0);
+  const shipping =  3000;
+  const tax = subtotal * 0.015;
+  const grandtotal = subtotal + shipping + tax;
+
+  console.log(shipping, tax,subtotal);
+  
 
   return (
     <div className="container text-gray-500 mx-auto px-4 md:px-0 py-4 pt-28">
@@ -167,32 +171,40 @@ const PaymentPage = () => {
             <h2 className="text-2xl text-black font-semibold mb-4">Order Summary</h2>
             <div className="border-t border-gray-300 pt-4 space-y-2">
               <div className="flex justify-between">
-                <h4>Cat1</h4>
-                <span>1x</span>
+                <h4>Cart</h4>
+                <span>{products.reduce((totalItems,p)=> totalItems + p.quantity,0)} Items</span>
               </div>
-              <div className="flex justify-between">
-                <p>Item1</p>
-                <span>40,000 MMK</span>
+              <div className="border-t border-gray-300">
+                  {products.map((product)=>(
+                    <div className="flex justify-between">
+                      <p>{product.name}</p>
+                      <p>{product.price}</p>
+                      <p>{product.quantity}</p>
+                      <span>{product.price * product.quantity} MMK</span>
+                    </div>
+                  ))}
               </div>
             </div>
+
             <div className="border-t border-gray-300 pt-4 space-y-2 mt-4">
               <div className="flex justify-between">
                 <h4>Subtotal</h4>
-                <span>40,000 MMK</span>
+                <span>{subtotal} MMK</span>
               </div>
               <div className="flex justify-between">
                 <h4>Shipping</h4>
-                <span>40,000 MMK</span>
+                <span>{shipping} MMK</span>
               </div>
               <div className="flex justify-between">
                 <h4>Tax</h4>
-                <span>40,000 MMK</span>
+                <span>{tax} MMK</span>
               </div>
               <div className="flex justify-between text-black font-semibold text-lg">
                 <h4>Total</h4>
-                <span>40,000 MMK</span>
+                <span>{grandtotal} MMK</span>
               </div>
             </div>
+
             <button className="w-full py-3 mt-6 cursor-pointer bg-primary/90 rounded-lg text-white font-medium hover:bg-primary transition" onClick={handleOrder}>Place Order</button>
           </div>
         </div>

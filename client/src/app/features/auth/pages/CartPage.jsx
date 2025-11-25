@@ -4,7 +4,8 @@ import { addToCart, removeFromCart, clearCart, getCartItemsCount, totalPrice, up
 import { assets } from '@/assets/assets'
 import { useNavigate } from 'react-router'
 import PopupModal from '@/components/ui/PopupModal'
-import { checkAuth, createOrder } from '@/services/api'
+import { checkAuth } from '@/services/authService'
+import { createOrder } from '@/services/api'
 import toast from 'react-hot-toast'
 import Login from '@/components/ui/Login'
 
@@ -20,6 +21,21 @@ const CartPage = () => {
   const totalItems = useSelector(getCartItemsCount);
   const totalPrices = useSelector(totalPrice);
 
+  const dummyAddress = [
+    {
+      street: "No.123 Main Road",
+      city: "Mandalay",
+      state: "MDY",
+      country: "Myanmar",
+    },
+    {
+      street: "No.52 Front Street",
+      city: "Yangon",
+      state: "YGN",
+      country: "Myanmar",
+    },
+  ];
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,17 +47,25 @@ const CartPage = () => {
     dispatch(removeFromCart(id));
   }
 
+  useEffect(() => {
+    setSelectedAddress(dummyAddress[0])
+  }, [])
+
   const handleOrder = async () => {
 
     if (checkAuth()) {
-      if (paymentOption === "COD") {
-        if (products.length > 0) {
-          const orderData = {
-            items: products,
-            address: selectedAddress,
-            paymentMethod: paymentOption,
-            totalAmount: (totalPrices + totalPrices * 0.02).toFixed(2),
-          };
+
+      if (products.length > 0) {
+
+        const orderData = {
+          items: products,
+          address: selectedAddress,
+          paymentMethod: paymentOption,
+          totalAmount: (totalPrices + totalPrices * 0.02).toFixed(2),
+        };
+
+        if (paymentOption === "COD") {
+
 
           try {
             const res = await createOrder(orderData);
@@ -58,12 +82,15 @@ const CartPage = () => {
           } catch (err) {
             toast.error("Something went wrong!");
           }
+
         } else {
-          toast.error("Your cart is empty!");
+          navigate("/my-account/payments", {state: {orderData}});
         }
+
       } else {
-        navigate("/my-account/payments");
+        toast.error("Your cart is empty!");
       }
+
     } else {
       toast.error("Please login to order");
       setShowLoginModal(true);
@@ -98,43 +125,43 @@ const CartPage = () => {
           <p className="text-center">Action</p>
         </div>}
 
-          {products.map((product, index) => {
-            const itemPrice = itemTotalPrice({ cart: { items: products } }, product._id);
+        {products.map((product, index) => {
+          const itemPrice = itemTotalPrice({ cart: { items: products } }, product._id);
 
-            return (
-              <div key={index} className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3">
-                <div className="flex items-center md:gap-6 gap-3">
-                  <div className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded overflow-hidden">
-                    <img className="max-w-full object-cover" src={product.image[0]} alt={product.name}
-                      onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}/${product._id}`, scrollTo(0, 0))}
-                    />
-                  </div>
-                  <div>
-                    <p className="hidden md:block font-semibold">{product.name}</p>
-                    <div className="font-normal text-gray-500/70">
-                      <p>Type: <span>{product.subCategory || "N/A"}</span></p>
-                      <div className='flex items-center'>
-                        <p>Qty:</p>
-                        <select
-                          className='outline-none'
-                          onChange={e => handleUpdateItem(product._id, Number(e.target.value))}
-                          value={product.quantity}
-                        >
-                          {Array.from({ length: Math.max(9, product.quantity) }, (_, i) => (
-                            <option key={i} value={i + 1}>{i + 1}</option>
-                          ))}
-                        </select>
-                      </div>
+          return (
+            <div key={index} className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3">
+              <div className="flex items-center md:gap-6 gap-3">
+                <div className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded overflow-hidden">
+                  <img className="max-w-full object-cover" src={product.image[0]} alt={product.name}
+                    onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}/${product._id}`, scrollTo(0, 0))}
+                  />
+                </div>
+                <div>
+                  <p className="hidden md:block font-semibold">{product.name}</p>
+                  <div className="font-normal text-gray-500/70">
+                    <p>Type: <span>{product.subCategory || "N/A"}</span></p>
+                    <div className='flex items-center'>
+                      <p>Qty:</p>
+                      <select
+                        className='outline-none'
+                        onChange={e => handleUpdateItem(product._id, Number(e.target.value))}
+                        value={product.quantity}
+                      >
+                        {Array.from({ length: Math.max(9, product.quantity) }, (_, i) => (
+                          <option key={i} value={i + 1}>{i + 1}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 </div>
-                <p className="text-center">${itemPrice}</p>
-                <button className="cursor-pointer mx-auto" onClick={() => handleRemoveItem(product._id)}>
-                  <img src={assets.remove_icon} className='w-6 h-6 inline-block' alt="remove" />
-                </button>
               </div>
-            )
-          })}
+              <p className="text-center">${itemPrice}</p>
+              <button className="cursor-pointer mx-auto" onClick={() => handleRemoveItem(product._id)}>
+                <img src={assets.remove_icon} className='w-6 h-6 inline-block' alt="remove" />
+              </button>
+            </div>
+          )
+        })}
 
         {products.length > 0 && (
           <button className="group cursor-pointer flex items-center mt-8 gap-2 text-indigo-500 font-medium" onClick={() => navigate("/products")}>
