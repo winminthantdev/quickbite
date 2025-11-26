@@ -51,6 +51,10 @@ const CartPage = () => {
     setSelectedAddress(dummyAddress[0])
   }, [])
 
+  const shipping =  3000;
+  const tax = Math.round(totalPrices * 0.015);
+  const grandtotal = totalPrices + shipping + tax;
+
   const handleOrder = async () => {
 
     if (checkAuth()) {
@@ -61,7 +65,10 @@ const CartPage = () => {
           items: products,
           address: selectedAddress,
           paymentMethod: paymentOption,
-          totalAmount: (totalPrices + totalPrices * 0.02).toFixed(2),
+          shipping : shipping,
+          tax : tax,
+          grandtotal : grandtotal,
+          totalAmount: totalPrices
         };
 
         if (paymentOption === "COD") {
@@ -216,13 +223,13 @@ const CartPage = () => {
               <span>Price</span><span>{totalPrices} MMK</span>
             </p>
             <p className="flex justify-between">
-              <span>Shipping Fee</span><span className="text-green-600">Free</span>
+              <span>Shipping Fee</span><span className="text-green-600">{shipping}</span>
             </p>
             <p className="flex justify-between">
-              <span>Tax (2%)</span><span>{(Math.round((totalPrices * 0.02) / 100) * 100).toFixed(2)} MMK</span>
+              <span>Tax (2%)</span><span>{tax} MMK</span>
             </p>
             <p className="flex justify-between text-lg font-medium mt-3">
-              <span>Total Amount:</span><span>{(totalPrices + (Math.round((totalPrices * 0.02) / 100) * 100)).toFixed(2)} MMK</span>
+              <span>Total Amount:</span><span>{grandtotal} MMK</span>
             </p>
           </div>
 

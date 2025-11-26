@@ -2,17 +2,26 @@ import React, { useState } from 'react';
 import { assets } from '@/assets/assets';
 import toast from 'react-hot-toast';
 import { checkAuth } from '../../../services/authService';
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 
 const PaymentPage = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [cardType, setCardType] = useState(""); 
+  const [form, setForm] = useState({
+    fullname: "",
+    cardNumber: "",
+    expDate: "",
+    cvc: "",
+  });
+
 
   const location = useLocation();
+  const [formCompleted, setFormCompleted] = useState(false)
 
   const orderDatas = location.state.orderData;  
+  const { totalAmount, shipping, tax, grandtotal} = orderDatas;
   const products = orderDatas.items;
+
 
   const cardList = [
     { type: "visa", src: assets.visa_card },
@@ -36,6 +45,50 @@ const PaymentPage = () => {
     setCardType(detectCardType(value));
   };
 
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+
+    const updated = { ...form, [name]: value };
+    setForm(updated);
+
+    const isCompleted =
+      updated.fullname.trim() !== "" &&
+      updated.cardNumber.trim() !== "" &&
+      updated.expDate.trim() !== "" &&
+      updated.cvc.trim() !== "";
+
+    setFormCompleted(isCompleted);
+  };
+
+  const validatePayment = () => {
+    const { fullname, cardNumber, expDate, cvc } = form;
+
+    // Name
+    if (fullname.trim().length < 3) return "Invalid cardholder name";
+
+    // Card number (16 digits)
+    const num = cardNumber.replace(/\D/g, "");
+    if (num.length !== 16) return "Invalid card number";
+
+    // Expiration (MM/YY)
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expDate)) {
+      return "Invalid expiration date";
+    }
+
+    // Expiration not passed
+    const [mm, yy] = expDate.split("/").map(Number);
+    const current = new Date();
+    const exp = new Date(2000 + yy, mm - 1);
+
+    if (exp < current) return "Card expired";
+
+    // CVC (3 digits)
+    if (!/^\d{3}$/.test(cvc)) return "Invalid CVC";
+
+    return null; // all good
+  };
+
+
   const handleOrder = async () => {
     if (!checkAuth()) {
       toast.error("Please login to order");
@@ -43,27 +96,41 @@ const PaymentPage = () => {
       return;
     }
 
-    try {
-      const res = await createOrder(orderDatas);
-      if (res.success) {
-        toast.success("Order placed successfully!");
-        localStorage.removeItem("order");
-        dispatch(clearCart());
-        navigate("/my-account/orders");
-      } else {
-        toast.error(res.message);
-      }
-    } catch (err) {
-      toast.error("Payment failed!");
+    const error = validatePayment();
+    if (error) {
+      toast.error(error);
+      return;
     }
-  };
+    toast.loading("Processing payment...");
+  try {
+    
+    const pay = await simulatePayment();
+    if (!pay.success) {
+      toast.dismiss();
+      toast.error("Payment failed!");
+      return;
+    }
 
-  const subtotal = products.reduce((total, p) => total + p.price * p.quantity, 0);
-  const shipping =  3000;
-  const tax = subtotal * 0.015;
-  const grandtotal = subtotal + shipping + tax;
+    
+    const res = await createOrder(orderDatas);
 
-  console.log(shipping, tax,subtotal);
+    toast.dismiss();
+
+    if (res.success) {
+      toast.success("Order placed successfully!");
+      localStorage.removeItem("order");
+      dispatch(clearCart());
+      navigate("/my-account/orders");
+    } else {
+      toast.error(res.message);
+    }
+
+  } catch (err) {
+    toast.dismiss();
+    toast.error("Something went wrong. Try again!");
+  }
+};
+
   
 
   return (
@@ -78,14 +145,15 @@ const PaymentPage = () => {
               <h3 className="text-lg text-black font-medium border-b pb-2 mb-4">Credit Card Information</h3>
 
               <div className="mb-4">
-                <label htmlFor="cardName" className="block font-medium mb-1">
+                <label htmlFor="fullname" className="block font-medium mb-1">
                   Name on Card <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  name="cardName"
-                  id="cardName"
+                  name="fullname"
+                  id="fullname"
                   placeholder="Enter your name on card"
+                  onChange={handleInput}
                   className="w-full border rounded px-3 py-2"
                 />
               </div>
@@ -101,7 +169,10 @@ const PaymentPage = () => {
                     id="cardNumber"
                     placeholder="xxxx-xxxx-xxxx-xxxx"
                     value={cardNumber}
-                    onChange={handleCardNumberChange}
+                    onChange={(e) => {
+                      handleCardNumberChange(e);
+                      handleInput(e);
+                    }}
                     className="w-full border rounded px-3 py-2"
                   />
                 </div>
@@ -121,14 +192,15 @@ const PaymentPage = () => {
 
               <div className="flex gap-4 mb-4">
                 <div className="flex-1">
-                  <label htmlFor="expiry" className="block font-medium mb-1">
+                  <label htmlFor="expDate" className="block font-medium mb-1">
                     Expiration Date <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
-                    name="expiry"
-                    id="expiry"
+                    name="expDate"
+                    id="expDate"
                     placeholder="MM/YY"
+                    onChange={handleInput}
                     className="w-full border rounded px-3 py-2"
                   />
                 </div>
@@ -141,6 +213,7 @@ const PaymentPage = () => {
                     name="cvc"
                     id="cvc"
                     placeholder="123"
+                    onChange={handleInput}
                     className="w-full border rounded px-3 py-2"
                   />
                 </div>
@@ -167,14 +240,14 @@ const PaymentPage = () => {
 
         {/* Order Summary */}
         <div className="flex justify-end">
-          <div className="w-full max-w-md bg-white shadow rounded p-6">
+          <div className="w-full bg-white shadow rounded p-6">
             <h2 className="text-2xl text-black font-semibold mb-4">Order Summary</h2>
             <div className="border-t border-gray-300 pt-4 space-y-2">
               <div className="flex justify-between">
                 <h4>Cart</h4>
                 <span>{products.reduce((totalItems,p)=> totalItems + p.quantity,0)} Items</span>
               </div>
-              <div className="border-t border-gray-300">
+              <div className="border-t border-gray-300 pt-8">
                   {products.map((product)=>(
                     <div className="flex justify-between">
                       <p>{product.name}</p>
@@ -189,7 +262,7 @@ const PaymentPage = () => {
             <div className="border-t border-gray-300 pt-4 space-y-2 mt-4">
               <div className="flex justify-between">
                 <h4>Subtotal</h4>
-                <span>{subtotal} MMK</span>
+                <span>{totalAmount} MMK</span>
               </div>
               <div className="flex justify-between">
                 <h4>Shipping</h4>
@@ -205,7 +278,7 @@ const PaymentPage = () => {
               </div>
             </div>
 
-            <button className="w-full py-3 mt-6 cursor-pointer bg-primary/90 rounded-lg text-white font-medium hover:bg-primary transition" onClick={handleOrder}>Place Order</button>
+            <button className={`w-full py-3 mt-6 rounded-lg text-white font-medium transition ${formCompleted ? 'bg-primary/90 hover:bg-primary cursor-pointer' : 'bg-gray-300/90 cursor-not-allowed'} `} disabled={!formCompleted} onClick={handleOrder}>Place Order</button>
           </div>
         </div>
       </div>
