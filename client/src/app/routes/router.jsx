@@ -16,6 +16,7 @@ import authRouter from "./authRouter";
 import { authUtils } from "@/lib/utils";
 import MainLayout from "../components/core/layouts/MainLayout";
 import AdminLayout from "../components/core/layouts/AdminLayout";
+import ProfilePage from "../features/user/pages/ProfilePage";
 
 const token = authUtils.getToken()
 const role= authUtils.getRole();
@@ -47,7 +48,8 @@ const router = createBrowserRouter([
           { path: "cart", element: <CartPage /> },
           { path: "add-address", element: <AddAddress /> },
           { path: "orders", element: <MyOrders /> },
-          { path: "payments", element: <PaymentPage /> }
+          { path: "payments", element: <PaymentPage /> },
+          { path: "user-info", element: <ProfilePage /> }
         ],
       },
     ],

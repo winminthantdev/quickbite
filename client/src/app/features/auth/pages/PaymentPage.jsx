@@ -6,7 +6,7 @@ import { useLocation } from 'react-router';
 
 const PaymentPage = () => {
   const [cardNumber, setCardNumber] = useState("");
-  const [cardType, setCardType] = useState(""); 
+  const [cardType, setCardType] = useState("");
   const [form, setForm] = useState({
     fullname: "",
     cardNumber: "",
@@ -18,8 +18,8 @@ const PaymentPage = () => {
   const location = useLocation();
   const [formCompleted, setFormCompleted] = useState(false)
 
-  const orderDatas = location.state.orderData;  
-  const { totalAmount, shipping, tax, grandtotal} = orderDatas;
+  const orderDatas = location.state.orderData;
+  const { totalAmount, shipping, tax, grandtotal } = orderDatas;
   const products = orderDatas.items;
 
 
@@ -102,36 +102,35 @@ const PaymentPage = () => {
       return;
     }
     toast.loading("Processing payment...");
-  try {
-    
-    const pay = await simulatePayment();
-    if (!pay.success) {
+    try {
+
+      const pay = await simulatePayment();
+      if (!pay.success) {
+        toast.dismiss();
+        toast.error("Payment failed!");
+        return;
+      }
+
+
+      const res = await createOrder(orderDatas);
+
       toast.dismiss();
-      toast.error("Payment failed!");
-      return;
+
+      if (res.success) {
+        toast.success("Order placed successfully!");
+        localStorage.removeItem("order");
+        dispatch(clearCart());
+        navigate("/my-account/orders");
+      } else {
+        toast.error(res.message);
+      }
+
+    } catch (err) {
+      toast.dismiss();
+      toast.error("Something went wrong. Try again!");
     }
+  };
 
-    
-    const res = await createOrder(orderDatas);
-
-    toast.dismiss();
-
-    if (res.success) {
-      toast.success("Order placed successfully!");
-      localStorage.removeItem("order");
-      dispatch(clearCart());
-      navigate("/my-account/orders");
-    } else {
-      toast.error(res.message);
-    }
-
-  } catch (err) {
-    toast.dismiss();
-    toast.error("Something went wrong. Try again!");
-  }
-};
-
-  
 
   return (
     <div className="container text-gray-500 mx-auto px-4 md:px-0 py-4 pt-28">
@@ -182,9 +181,8 @@ const PaymentPage = () => {
                       key={card.type}
                       src={card.src}
                       alt={card.type}
-                      className={`w-12 h-8 p-1 rounded object-contain border-2 transition ${
-                        cardType === card.type ? "border-primary" : "border-gray-300"
-                      } transition-all`}
+                      className={`w-12 h-8 p-1 rounded object-contain border-2 transition ${cardType === card.type ? "border-primary" : "border-gray-300"
+                        } transition-all`}
                     />
                   ))}
                 </div>
@@ -245,17 +243,17 @@ const PaymentPage = () => {
             <div className="border-t border-gray-300 pt-4 space-y-2">
               <div className="flex justify-between">
                 <h4>Cart</h4>
-                <span>{products.reduce((totalItems,p)=> totalItems + p.quantity,0)} Items</span>
+                <span>{products.reduce((totalItems, p) => totalItems + p.quantity, 0)} Items</span>
               </div>
               <div className="border-t border-gray-300 pt-8">
-                  {products.map((product)=>(
-                    <div className="flex justify-between">
-                      <p>{product.name}</p>
-                      <p>{product.price}</p>
-                      <p>{product.quantity}</p>
-                      <span>{product.price * product.quantity} MMK</span>
-                    </div>
-                  ))}
+                {products.map((product) => (
+                  <div className="flex justify-between">
+                    <p>{product.name}</p>
+                    <p>{product.price}</p>
+                    <p>{product.quantity}</p>
+                    <span>{product.price * product.quantity} MMK</span>
+                  </div>
+                ))}
               </div>
             </div>
 
