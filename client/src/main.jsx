@@ -1,21 +1,26 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-// import {Provider } from 'react-redux'
-// import store from './store/store.js'
-import './index.css'
-import App from './App.jsx'
-import './lib/fontawesome.js'
-import { BrowserRouter } from 'react-router'
-import { Provider } from 'react-redux'
-import store from './store/store.js'
-import { AppContextProvider } from './context/AppContext.jsx'
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { RouterProvider } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { Provider } from 'react-redux'; 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "@/lib/fontawesome.js"
 
-createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <AppContextProvider>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </AppContextProvider>
-  </BrowserRouter>,
-)
+import store from '@/store/store'; 
+import router from "@/routes/router";
+import "./index.css";
+
+
+
+const queryClient = new QueryClient();
+
+createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <Provider store={store}> 
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <Toaster position="top-center" />
+      </QueryClientProvider>
+    </Provider>
+  </React.StrictMode>
+);
