@@ -4,7 +4,7 @@ import { RouterProvider } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { Provider } from 'react-redux'; 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "@/lib/fontawesome.js"
+import "@/lib/fontawesome"
 
 import store from '@/store/store'; 
 import router from "@/routes/router";
