@@ -51,7 +51,8 @@ const Navbar = () => {
     }, [searchItem]);
 
 
-
+    const {userinfo} = getUserInfo();
+    
 
     const handleSignout = () => {
         logoutUser();
@@ -136,13 +137,13 @@ const Navbar = () => {
                                             className="cursor-pointer hover:text-black"
                                             onClick={() => navigate("/my-account/user-info")}
                                         >
-                                            {getUserInfo()?.userinfo?.name}
+                                            {userinfo?.name}
                                         </li>
                                         <li
                                             className="cursor-pointer hover:text-black"
                                             onClick={() => navigate("/my-account/user-info")}
                                         >
-                                            {getUserInfo()?.userinfo?.email}
+                                            {userinfo?.email}
                                         </li>
                                         <li
                                             className="cursor-pointer hover:text-black"

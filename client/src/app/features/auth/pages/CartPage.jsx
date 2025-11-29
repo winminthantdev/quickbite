@@ -8,6 +8,8 @@ import { checkAuth } from '@/services/authService'
 import { createOrder } from '@/services/api'
 import toast from 'react-hot-toast'
 import Login from '@/components/ui/Login'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 const CartPage = () => {
   const [showAddress, setShowAddress] = useState(false)
@@ -149,15 +151,11 @@ const CartPage = () => {
                     <p>Type: <span>{product.subCategory || "N/A"}</span></p>
                     <div className='flex items-center'>
                       <p>Qty:</p>
-                      <select
-                        className='outline-none'
-                        onChange={e => handleUpdateItem(product._id, Number(e.target.value))}
-                        value={product.quantity}
-                      >
-                        {Array.from({ length: Math.max(9, product.quantity) }, (_, i) => (
-                          <option key={i} value={i + 1}>{i + 1}</option>
-                        ))}
-                      </select>
+                      <div className="flex justify-center items-center gap-2 ms-2">
+                        <FontAwesomeIcon icon={faPlus} className='text-xs' onClick={()=>handleUpdateItem(product._id, Number(product.quantity + 1))}/>
+                        <span className='selectnone font-bold'>{product.quantity}</span>
+                        <FontAwesomeIcon icon={faMinus} className='text-xs' onClick={()=>handleUpdateItem(product._id, Number(Math.max(0, product.quantity - 1)))}/>
+                      </div>
                     </div>
                   </div>
                 </div>
