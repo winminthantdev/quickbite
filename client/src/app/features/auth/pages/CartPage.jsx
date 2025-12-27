@@ -153,7 +153,7 @@ const CartPage = () => {
                       <p>Qty:</p>
                       <div className="flex justify-center items-center gap-2 ms-2">
                         <FontAwesomeIcon icon={faPlus} className='text-xs' onClick={()=>handleUpdateItem(product._id, Number(product.quantity + 1))}/>
-                        <span className='selectnone font-bold'>{product.quantity}</span>
+                        <span                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               className='selectnone font-bold'>{product.quantity}</span>
                         <FontAwesomeIcon icon={faMinus} className='text-xs' onClick={()=>handleUpdateItem(product._id, Number(Math.max(0, product.quantity - 1)))}/>
                       </div>
                     </div>
