@@ -1,53 +1,27 @@
-import users from "./data/user.json";
+const API_BASE = "http://127.0.0.1:8000/api/v1";
 
-// ------- START AUTH  --------
-// export const loginUser = (email, password) => {
-//   if (!email || !password) {
-//     return { success: false, message: "Email and password are required" };
-//   }
-
-//   console.log(users);
-  
-//   // const user = users.find(
-//   //   usr => usr.email === email.trim() && usr.password === password
-//   // );
-//   // const user = http://127.0.0.1:8000/api/v1/admin/login
-
-
-
-//   if (user) {
-//     // Save user in localStorage
-//     localStorage.setItem("auth", JSON.stringify({userid : user._id}));
-//     return { success: true };
-//   }
-
-//   return { success: false, message: "Email or password incorrect" };
-// };
-
+// ---------------- LOGIN ----------------
 export const loginUser = async (email, password) => {
-
-  if(!email || !password){
-      return { success: false, message: "Email and password are required" };
+  if (!email || !password) {
+    return { success: false, message: "Email and password are required" };
   }
 
-  try{
-    const response = await fetch("http://127.0.0.1:8000/api/v1/admin/login",{
+  try {
+    const response = await fetch(`${API_BASE}/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify({
         email: email.trim(),
-        password: password
-      })
-    })
+        password,
+      }),
+    });
 
     const data = await response.json();
 
-    console.log(response,data);
-
-     if (!response.ok) {
+    if (!response.ok) {
       return {
         success: false,
         message: data.message || "Login failed",
@@ -63,37 +37,109 @@ export const loginUser = async (email, password) => {
     );
 
     return { success: true };
-    
-
-  }catch(error){
+  } catch (error) {
     console.error(error);
     return {
       success: false,
       message: "Server error. Try again later.",
     };
   }
-}
+};
 
-export const checkAuth = () => {
-  const auth = localStorage.getItem("auth");
-  if(auth){
-    return true
+// ---------------- REGISTER USER ----------------
+export const registerUser = async (name, email, password) => {
+  if(!name || !email || !password){
+    return { success: false, message: "Full Name, Email and  Password are required" };
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/user/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type" : "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        name: name.trim(),
+        email: email.trim(),
+        password: password.trim()
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: data.message || "Registation failed",
+      };
+    }
+    return {success: true};
+
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Server error. Try again later.",
+    };
   }
 };
 
-export const logoutUser = () => {
-  localStorage.removeItem("auth");
-  return { success: true };
+
+// ---------------- CHECK AUTH ----------------
+export const checkAuth = () => {
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  return !!auth?.token;
 };
 
-export const getUserInfo = () => {
+// ---------------- GET CURRENT USER ----------------
+export const getUserInfo = async () => {
   const auth = JSON.parse(localStorage.getItem("auth"));
-  if (!auth?.userid) {
-    return { success: false, message: "Not logged in" };
-  }  
-  const user = users.find(user=> user._id === auth.userid);
 
-  return user ? {userinfo : user} : null;
-}
+  if (!auth?.token) {
+    return { success: false, message: "Not authenticated" };
+  }
 
-// ------- END AUTH --------
+  try {
+    const response = await fetch(`${API_BASE}/user/profile`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${auth.token}`,
+      },
+    });
+
+    if (response.status === 401) {
+      logoutUser();
+      return { success: false, message: "Session expired" };
+    }
+
+    const data = await response.json();
+    return { success: true, user: data.user };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Failed to load user" };
+  }
+};
+
+// ---------------- LOGOUT ----------------
+export const logoutUser = async () => {
+  const auth = JSON.parse(localStorage.getItem("auth"));
+
+  try {
+    if (auth?.token) {
+      await fetch(`${API_BASE}/user/logout`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    localStorage.removeItem("auth");
+  }
+
+  return { success: true };
+};

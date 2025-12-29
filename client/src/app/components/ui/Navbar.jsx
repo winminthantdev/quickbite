@@ -51,7 +51,10 @@ const Navbar = () => {
     }, [searchItem]);
 
 
-    const {userinfo} = getUserInfo();
+    const userInfo = JSON.parse(localStorage.getItem("auth")).user;
+
+    console.log(userInfo);
+    
     
 
     const handleSignout = () => {
@@ -137,13 +140,13 @@ const Navbar = () => {
                                             className="cursor-pointer hover:text-black"
                                             onClick={() => navigate("/my-account/user-info")}
                                         >
-                                            {userinfo?.name}
+                                            {userInfo?.name}
                                         </li>
                                         <li
                                             className="cursor-pointer hover:text-black"
                                             onClick={() => navigate("/my-account/user-info")}
                                         >
-                                            {userinfo?.email}
+                                            {userInfo?.email}
                                         </li>
                                         <li
                                             className="cursor-pointer hover:text-black"
@@ -210,13 +213,13 @@ const Navbar = () => {
                                     className="cursor-pointer hover:text-black"
                                     onClick={() => navigate("/my-account/user-info")}
                                 >
-                                    {getUserInfo()?.userinfo?.name}
+                                    {userInfo?.name}
                                 </li>
                                 <li
                                     className="cursor-pointer hover:text-black"
                                     onClick={() => navigate("/my-account/user-info")}
                                 >
-                                    {getUserInfo()?.userinfo?.email}
+                                    {userInfo?.email}
                                 </li>
                                 <li
                                     className="cursor-pointer hover:text-black"

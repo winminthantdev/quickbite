@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { loginUser } from '@/services/authService'
 import Signup from './Signup'
+import { registerUser } from '../../services/authService'
 
 const Login = ({ onClose }) => {
     const [email, setEmail] = useState("")
@@ -30,12 +31,20 @@ const Login = ({ onClose }) => {
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        console.log("Signup:", signupEmail, signupPassword);
+        console.log("Signup:",signupName, signupEmail, signupPassword);
 
         // TODO: call signup API here
+        const res = await registerUser(signupName, signupEmail, signupPassword)
 
-        toast.success("Registered successfully!");  
-        setFormState("login"); // Switch back to login
+        console.log(res);
+
+        if(res.success){
+            toast.success("Registered successfully! Please Login");  
+            setFormState("login"); 
+        }else{
+            toast.error(res.message)
+        }
+
     };
 
     return (
@@ -106,6 +115,19 @@ const Login = ({ onClose }) => {
                     </div>
 
                     {/* Password */}
+                    <div className="flex items-center mt-4 w-full bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
+                        <FontAwesomeIcon icon={faLock} className='text-gray-500' />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            className="bg-transparent text-gray-500 placeholder-gray-500 outline-none text-sm w-full h-full"
+                            value={signupPassword}
+                            onChange={(e) => setSignupPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    {/* Confirm Password */}
                     <div className="flex items-center mt-4 w-full bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
                         <FontAwesomeIcon icon={faLock} className='text-gray-500' />
                         <input
