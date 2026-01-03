@@ -52,8 +52,6 @@ const Navbar = () => {
 
 
     const userInfo = JSON.parse(localStorage.getItem("auth")).user;
-
-    console.log(userInfo);
     
     
 

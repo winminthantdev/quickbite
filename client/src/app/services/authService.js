@@ -94,9 +94,15 @@ export const checkAuth = () => {
 
 // ---------------- GET CURRENT USER ----------------
 export const getUserInfo = async () => {
-  const auth = JSON.parse(localStorage.getItem("auth"));
+  const auth = localStorage.getItem("auth");
 
-  if (!auth?.token) {
+  if (!auth) {
+    return { success: false, message: "Not authenticated" };
+  }
+
+  const { token } = JSON.parse(auth);
+
+  if (!token) {
     return { success: false, message: "Not authenticated" };
   }
 
@@ -104,7 +110,7 @@ export const getUserInfo = async () => {
     const response = await fetch(`${API_BASE}/user/profile`, {
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${auth.token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -114,12 +120,21 @@ export const getUserInfo = async () => {
     }
 
     const data = await response.json();
-    return { success: true, user: data.user };
+
+    return {
+      success: true,
+      user: data.user || null,
+    };
+
   } catch (error) {
-    console.error(error);
-    return { success: false, message: "Failed to load user" };
+    console.error("getUserInfo error:", error);
+    return {
+      success: false,
+      message: "Network error",
+    };
   }
 };
+  
 
 // ---------------- LOGOUT ----------------
 export const logoutUser = async () => {
