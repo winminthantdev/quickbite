@@ -30,6 +30,11 @@ export const fetchCategories = async () => {
   return request("/categories");
 };
 
+// ----- featch SubCategories
+export const fetchSubCategories = async () => {
+  return request("/subcategories");
+};
+
 // ------- PRODUCTS --------
 
 export const fetchProducts = async () => {

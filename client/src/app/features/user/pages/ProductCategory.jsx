@@ -5,9 +5,10 @@ import ProductCard from '@/components/ui/ProductCard';
 import { fetchProducts } from '@/services/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import Pagination from '../../../components/ui/Pagination';
+import Pagination from '@/components/ui/Pagination';
 
 const ProductCategory = () => {
+  
   const { category, subcategory } = useParams();
   const location = useLocation();
   const stateProducts = location.state?.products ?? null;
@@ -15,7 +16,7 @@ const ProductCategory = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-
+  
   const PAGESIZE = 10;
 
   useEffect(() => {

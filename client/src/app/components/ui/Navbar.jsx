@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import Login from '@/components/ui/Login';
 import { checkAuth, getUserInfo, logoutUser } from '@/services/authService';
 import { faUser, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { fetchCategories, searchProducts } from '@/services/api';
+import { fetchCategories, fetchSubCategories, searchProducts } from '@/services/api';
 
 const Navbar = () => {
     const [searchItem, setSearchItem] = useState("");
@@ -23,12 +23,31 @@ const Navbar = () => {
 
     // fetch categories from API (or local JSON)
     useEffect(() => {
-        const loadCategories = async () => {
-            const data = await fetchCategories();
-            setCategories(data);
-        };
-        loadCategories();
-    }, []);
+            const loadCategories = async () => {
+                try {
+                    const catRes = await fetchCategories();
+                    const subRes = await fetchSubCategories();
+
+                    const categories = catRes.data ?? catRes;
+                    const subcategories = subRes.data ?? subRes;
+
+                    const mergedCategories = categories.map(cat => ({
+                        ...cat,
+                        subcategories: subcategories
+                            .filter(sub => sub.category.id === cat.id)
+                            .map(sub => sub.name)
+                    }));
+
+                    setCategories(mergedCategories);
+
+                } catch (error) {
+                    console.error("Failed to load categories:", error);
+                }
+            };
+
+            loadCategories();
+        }, []);
+
 
 
     useEffect(() => {
@@ -53,7 +72,6 @@ const Navbar = () => {
 
     const userInfo = JSON.parse(localStorage.getItem("auth"))?.user || null;
     
-    
 
     const handleSignout = () => {
         logoutUser();
@@ -70,14 +88,14 @@ const Navbar = () => {
 
                 {/* Desktop Menu */}
                 <div className="hidden lg:flex items-center gap-4 xl:gap-8">
-                    {categories.map((category, index) => (
+                    {categories?.map((category, index) => (
                         <div key={index} className="relative group">
                             <Link
-                                to={`/products/${category.path.toLowerCase()}`}
+                                to={`/products/${category.slug}`}
                                 className="flex items-center text-xs xl:text-md space-x-2"
                             >
                                 <span className="truncate whitespace-nowrap overflow-hidden">
-                                    {category.text}
+                                    {category.name}
                                 </span>
                                 <FontAwesomeIcon icon={faChevronDown} />
                             </Link>
@@ -89,7 +107,7 @@ const Navbar = () => {
                                         {category.subcategories.map((subCat, idx) => (
                                             <Link
                                                 key={idx}
-                                                to={`/products/${category.path.toLowerCase()}/${subCat.toLowerCase()}`}
+                                                to={`/products/${category.slug}/${subCat.toLowerCase()}`}
                                                 className="text-nowrap hover:text-primary"
                                             >
                                                 {subCat}
@@ -189,9 +207,9 @@ const Navbar = () => {
 
                 {/* Mobile dropdown */}
                 <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm lg:hidden`}>
-                    {categories.map((cat, idx) => (
+                    {categories?.map((cat, idx) => (
                         <div key={idx} className="flex flex-col w-full">
-                            <Link to={`/products/${cat.path.toLowerCase()}`} className="block py-2">
+                            <Link to={`/products/${cat.slug}`} className="block py-2">
                                 {cat.text}
                             </Link>
                         </div>
