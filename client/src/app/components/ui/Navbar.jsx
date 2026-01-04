@@ -51,7 +51,7 @@ const Navbar = () => {
     }, [searchItem]);
 
 
-    const userInfo = JSON.parse(localStorage.getItem("auth")).user;
+    const userInfo = JSON.parse(localStorage.getItem("auth"))?.user || null;
     
     
 

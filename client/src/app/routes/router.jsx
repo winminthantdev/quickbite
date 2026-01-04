@@ -18,11 +18,6 @@ import MainLayout from "../components/core/layouts/MainLayout";
 import AdminLayout from "../components/core/layouts/AdminLayout";
 import ProfilePage from "../features/user/pages/ProfilePage";
 
-const token = authUtils.getToken()
-const role= authUtils.getRole();
-
-
-
 const router = createBrowserRouter([
 
   {
@@ -39,8 +34,7 @@ const router = createBrowserRouter([
 
   // USER ROUTES
   {
-    // element: <ProtectedRoute token={token} role={role} allow={["USER", "ADMIN"]} />,
-    children: [
+      children: [
       {
         path: "/my-account",
         element: <MainLayout />,

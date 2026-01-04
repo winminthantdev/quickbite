@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const request = async (endpoint, options = {}) => {
   try {
@@ -22,7 +22,13 @@ const request = async (endpoint, options = {}) => {
 // ------- START FETCH DATA --------
 
 import products from "./data/products.json";
-import categories from "./data/categories.json";
+
+
+// ------- CATEGORIES --------
+
+export const fetchCategories = async () => {
+  return request("/categories");
+};
 
 // ------- PRODUCTS --------
 
@@ -55,18 +61,6 @@ export const searchProducts = async (query) => {
   });
 };
 
-
-// ------- CATEGORIES --------
-
-export const fetchCategories = async () => {
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      const all = Object.values(categories).flat();
-      const unique = [...new Set(all)];
-      resolve(unique);
-    })
-  );
-};
 
 
 // ------- END FETCH DATA --------

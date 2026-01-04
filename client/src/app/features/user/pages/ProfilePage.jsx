@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { checkAuth, getUserInfo } from '@/services/authService';
+import { useNavigate } from 'react-router';
 
 const ProfilePage = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const navigate =  useNavigate()
+
   useEffect(() => {
     const fetchProfile = async () => {
+
       if (!checkAuth()) {
         setLoading(false);
-        return;
+        navigate('/');
       }
 
       const res = await getUserInfo();
