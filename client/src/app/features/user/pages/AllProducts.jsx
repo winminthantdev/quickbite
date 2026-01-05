@@ -18,8 +18,9 @@ const AllProducts = () => {
   useEffect(() => {
     const loadProducts = async () => {
       setLoading(true);
-      const prods = await fetchProducts();
-      setProducts(prods);
+      const res = await fetchProducts();
+      const {meta, data} = res;
+      setProducts(data);
       setLoading(false);
     };
     loadProducts();

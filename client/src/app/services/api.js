@@ -38,11 +38,7 @@ export const fetchSubCategories = async () => {
 // ------- PRODUCTS --------
 
 export const fetchProducts = async () => {
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      resolve(products);
-    })
-  );
+  return request("/menus")
 };
 
 
