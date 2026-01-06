@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Title from '@/components/ui/Title'
 import ProductCard from '@/components/ui/ProductCard'
+import { useQuery } from '@tanstack/react-query';
 import { useAppContext } from '@/context/AppContext'
 import { fetchProducts } from '@/services/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -8,32 +9,30 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import Pagination from '../../../components/ui/Pagination'
 
 const AllProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+
   const [page, setPage] = useState(1);
   
-
   const PAGESIZE = 10;
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      setLoading(true);
-      const res = await fetchProducts();
-      const {meta, data} = res;
-      setProducts(data);
-      setLoading(false);
-    };
-    loadProducts();
-  }, []);
 
-    const totalPages = Math.max(1, Math.ceil(products.length/PAGESIZE));
-    const pageItems = products.slice((page-1) * PAGESIZE,page * PAGESIZE)  
+  const fetchMenusFun = async () => {
+    const res = await fetchProducts({ pageSize : PAGESIZE });
+    return res || [];
+  };
+
+  const {data : menus = [], isLoading, isFetching} = useQuery({queryKey: ["menus"], queryFn: fetchMenusFun})
+
+
+    const totalPages = menus.meta.total_page;
+    
+    const pageItems = menus.data; 
+    console.log(pageItems, totalPages);
 
   return (
     <div className='container mx-auto px-8 md:px-0 py-4 pt-20'>
       <Title title="All Products" haveButton={false} />
       {
-        loading ? (<p className="text-center mt-20"><FontAwesomeIcon spin icon={faSpinner} className='me-2' />Loading products...</p>) : 
+        isLoading || isFetching ? (<p className="text-center mt-20"><FontAwesomeIcon spin icon={faSpinner} className='me-2' />Loading products...</p>) : 
         (
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 place-items-center mt-6'>
             {pageItems.length > 0 ? (

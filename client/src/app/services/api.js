@@ -37,10 +37,16 @@ export const fetchSubCategories = async () => {
 
 // ------- PRODUCTS --------
 
-export const fetchProducts = async () => {
-  return request("/menus")
-};
+export const fetchProducts = async ({ searchText, statusId, pageSize }) => {
+  const params = new URLSearchParams();
 
+  if (searchText) params.append('search', searchText);
+  if (statusId) params.append('status_id', statusId);
+  if (pageSize) params.append('per_page', pageSize);
+
+  return request(`/menus?${params.toString()}`);
+};
+  
 
 export const fetchProductsById = async (id) => {
   const products = products.filter(product=> product._id === id) || [];
