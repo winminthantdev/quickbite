@@ -23,10 +23,10 @@ const AllProducts = () => {
   const {data : menus = [], isLoading, isFetching} = useQuery({queryKey: ["menus"], queryFn: fetchMenusFun})
 
 
-    const totalPages = menus.meta.total_page;
+    const totalPages = menus.meta?.total_page;
     
-    const pageItems = menus.data; 
-    console.log(pageItems, totalPages);
+    const pageItems = menus?.data; 
+
 
   return (
     <div className='container mx-auto px-8 md:px-0 py-4 pt-20'>
@@ -37,7 +37,7 @@ const AllProducts = () => {
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 place-items-center mt-6'>
             {pageItems.length > 0 ? (
               pageItems.map(product => (
-                <ProductCard key={product._id} product={product} />
+                <ProductCard key={product.id} product={product} />
               ))
             ) : (
               <p className="col-span-full text-center text-gray-500 py-8">

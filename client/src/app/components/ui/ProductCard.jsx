@@ -17,22 +17,22 @@ const ProductCard = ({product}) => {
 
   return (    
     <div 
-        key={`${product._id}`}
+        key={`${product.id}`}
         className="group w-full min-w-[250px] max-w-[300px] flex-shrink-0 relative flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md cursor-pointer my-4"
-        onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}/${product._id}`, scrollTo(0,0))}
+        onClick={() => navigate(`/products/${product.category.slug}/${product.subcategory.slug}/${product.id}`, scrollTo(0,0))}
       >
         {/* discount text when have discount */}
         {
           product.promotion?.isActive && (
             <div className="absolute top-2 right-2 bg-green-600 text-white font-bold rounded px-2 text-xs z-100">
-              {`${product.promotion.discountPercent}% off Ks. ${product.price - (product.price * product.promotion.discountPercent / 100)}`}
+              {`${product.promotion.discountPercent}% OFF`}
             </div>
           )
         }
         
         <div className="aspect-[16/9] overflow-hidden">
           <img 
-            src={product.image[0]}
+            src={product.image}
             className="w-full h-full object-contain transition duration-300 group-hover:scale-110" 
             alt={product.name} 
           />
@@ -43,20 +43,33 @@ const ProductCard = ({product}) => {
             <h3 className="text-xl font-bold truncate">{product.name}</h3>
             <div className="flex items-center gap-1">
               <img src={assets.star_icon} className="w-4 h-4" alt="star_icon" />
-              <span className="text-xs text-slate-500">4.9</span>
+              <span className="text-xs text-slate-500">{product.rating.toFixed(1)}</span>
             </div>
           </div>
           
-          <p className="text-slate-500 text-xs">$ <span>{product.subCategory} ( {product.category} )</span></p>
+          <p className="text-slate-500 text-xs">$ <span>{product.subcategory?.name} ( {product.category?.name} )</span></p>
           
           <div className="flex items-center gap-2 text-slate-500 text-xs font-medium">
             <div className="flex items-center gap-1">
               <img src={assets.clock_icon} className="w-4 h-4" alt="" />
-              <span>25-40 minutes</span>
+              <span>25-40 mins</span>
             </div>
             <div className="flex items-center gap-1">
               <img src={assets.delivery_icon} className="w-4 h-4" alt="" />
-              <span>{product.price}MMK</span>
+              {product.promotion?.isActive ? (
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400 line-through">
+                  Ks. {parseFloat(product.price).toLocaleString()}
+                </span>
+                <span className="font-semibold">
+                  Ks. {parseFloat(product.final_price).toLocaleString()}
+                </span>
+              </div>
+            ) : (
+              <span className="text-lg font-semibold">
+                Ks. {parseFloat(product.price).toLocaleString()}
+              </span>
+            )}
             </div>
           </div>
           
