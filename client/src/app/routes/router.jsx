@@ -15,8 +15,8 @@ import PaymentPage from "../features/auth/pages/PaymentPage";
 import authRouter from "./authRouter";
 import { authUtils } from "@/lib/utils";
 import MainLayout from "../components/core/layouts/MainLayout";
-import AdminLayout from "../components/core/layouts/AdminLayout";
 import ProfilePage from "../features/user/pages/ProfilePage";
+import PromotionsPage from "../features/user/pages/PromotionPage";
 
 const router = createBrowserRouter([
 
@@ -26,6 +26,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       {path:'products' , element: <AllProducts />},
+      {path:'products/promotions' , element: <PromotionsPage />},
       {path:'products/:category' , element: <ProductCategory />},
       {path:'products/:category/:subcategory' , element: <ProductCategory />},
       {path:'products/:category/:subcategory/:id' , element: <ProductDetails />},
@@ -44,20 +45,6 @@ const router = createBrowserRouter([
           { path: "orders", element: <MyOrders /> },
           { path: "payments", element: <PaymentPage /> },
           { path: "user-info", element: <ProfilePage /> }
-        ],
-      },
-    ],
-  },
-
-  //ADMIN ROUTES
-  {
-    path: "/admin",
-    // element: <ProtectedRoute token={token} role={role} allow={["USER", "ADMIN"]} />,
-    children: [
-      {
-        element: <AdminLayout />,
-        children: [
-        //   { path: "/examplepath", element: <ExampleElement /> },
         ],
       },
     ],

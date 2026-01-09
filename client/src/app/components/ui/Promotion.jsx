@@ -10,83 +10,68 @@ import { Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { useNavigate } from 'react-router'
+import { useQuery } from '@tanstack/react-query'
 
 const Promotion = () => {
   const sectionRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
-  const [promotions, setPromotions] = useState([])
-  const [loading, setLoading] = useState(false)
-
   const navigate = useNavigate();
 
-
+  // Intersection Observer for animation
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
+      ([entry]) => {
+        if (entry.isIntersecting) {
           setIsVisible(true)
         }
       },
       { threshold: 0.2 }
     )
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
-      }
-    }
+    if (sectionRef.current) observer.observe(sectionRef.current)
+    return () => observer.disconnect();
   }, [])
 
-    // fetch products
+  //  Data Fetching Logic
+  const fetchMenusFun = async () => {
+    const res = await fetchProducts({ pageSize: 20 }); 
+    
+    // Filter only active promotions
+    const promotionData = res.data.filter(
+      product => product.promotion && product.promotion.isActive
+    );
 
-  useEffect(() => {
-    const getPromotions = async () => {
-      setLoading(true)
-      try {
-        const allProducts = await fetchProducts()
-        const activePromos = allProducts
-          .filter(product => product.promotion && product.promotion.isActive)
-          .sort((a, b) => b.promotion.discountPercent - a.promotion.discountPercent)
+    return promotionData;
+  };
 
-        setPromotions(activePromos)
-      } catch (error) {
-        console.error("Failed to fetch products:", error)
-        setPromotions([])
-      } finally {
-        setLoading(false)
-      }
-    }
+  const { data: promotions = [], isLoading } = useQuery({
+    queryKey: ["menus", "promotions"], 
+    queryFn: fetchMenusFun
+  });
 
-    getPromotions()
-  }, [])
-
+  // Route to promotion pages
   const handleSeeAllBtn = () => {
-    console.log("YOU ARE CLICKING SEE ALL ...");
-
-    navigate('/products/promotions', {state: {products: promotions}})
+    navigate('/products/promotions')
   }
 
   return (
     <div
       ref={sectionRef}
-      className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-0'}`}
+      className={`transition-all duration-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
     >
       <Title title="Promos for this Month" clickSeeAll={handleSeeAllBtn} />
 
-      {loading ? (
-        <p className="text-center py-8 text-gray-500">
-          <FontAwesomeIcon spin icon={faSpinner} className="me-2" /> Loading promotions...
-        </p>
+      {isLoading ? (
+        <div className="flex justify-center items-center py-12 text-gray-500">
+          <FontAwesomeIcon spin icon={faSpinner} className="mr-2" />
+          <span>Loading promotions...</span>
+        </div>
       ) : promotions.length > 0 ? (
         <Swiper
           modules={[Navigation]}
           navigation
           slidesPerView="auto"
-          spaceBetween={12}   // little space between cards
+          spaceBetween={12}
           className="mt-6"
         >
           {promotions.map((product) => (
@@ -96,8 +81,8 @@ const Promotion = () => {
           ))}
         </Swiper>
       ) : (
-        <p className="col-span-full text-center text-gray-500 py-8">
-          No promotions found.
+        <p className="text-center text-gray-400 py-12">
+          No promotions available at the moment.
         </p>
       )}
     </div>

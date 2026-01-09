@@ -37,12 +37,13 @@ export const fetchSubCategories = async () => {
 
 // ------- PRODUCTS --------
 
-export const fetchProducts = async ({ searchText, statusId, pageSize }) => {
+export const fetchProducts = async ({ searchText, statusId, pageSize, is_promotion }) => {
   const params = new URLSearchParams();
 
   if (searchText) params.append('search', searchText);
   if (statusId) params.append('status_id', statusId);
   if (pageSize) params.append('per_page', pageSize);
+  if (pageSize) params.append('is_promotion', is_promotion);
 
   return request(`/menus?${params.toString()}`);
 };
