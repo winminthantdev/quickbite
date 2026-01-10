@@ -11,6 +11,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { useNavigate } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
+import CardLoader from './CardLoader'
 
 const Promotion = () => {
   const sectionRef = useRef(null)
@@ -62,9 +63,8 @@ const Promotion = () => {
       <Title title="Promos for this Month" clickSeeAll={handleSeeAllBtn} />
 
       {isLoading ? (
-        <div className="flex justify-center items-center py-12 text-gray-500">
-          <FontAwesomeIcon spin icon={faSpinner} className="mr-2" />
-          <span>Loading promotions...</span>
+        <div className="flex justify-center items-center gap-8 py-12">
+          { [...Array(5)].map((_, i) => <CardLoader key={i} />)}
         </div>
       ) : promotions.length > 0 ? (
         <Swiper

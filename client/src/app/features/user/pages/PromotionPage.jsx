@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchProducts } from '@/services/api';
-import FullPageLoader from '../../../components/ui/FullPageLoader';
 import ProductCard from '../../../components/ui/ProductCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import Pagination from '../../../components/ui/Pagination'
 import { useState } from 'react';
 import Title from '../../../components/ui/Title';
+import CardLoader from '../../../components/ui/CardLoader';
 
 const PromotionsPage = () => {
     const [page, setPage] = useState(1);
@@ -39,7 +39,7 @@ const PromotionsPage = () => {
       {
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6'>
         {isLoading ? (
-          [...Array(10)].map((_, i) => <FullPageLoader key={i} />)
+          [...Array(10)].map((_, i) => <CardLoader key={i} />)
         ) : (
           <>
             {pageItems.length > 0 ? (
