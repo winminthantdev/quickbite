@@ -35,14 +35,9 @@ const Promotion = () => {
 
   //  Data Fetching Logic
   const fetchMenusFun = async () => {
-    const res = await fetchProducts({ pageSize: 20 }); 
-    
-    // Filter only active promotions
-    const promotionData = res.data.filter(
-      product => product.promotion && product.promotion.isActive
-    );
+    const promotionData = await fetchProducts({ pageSize: 20, is_promotion:true }); 
 
-    return promotionData;
+    return promotionData.data;
   };
 
   const { data: promotions = [], isLoading } = useQuery({

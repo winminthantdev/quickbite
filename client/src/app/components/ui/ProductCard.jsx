@@ -19,7 +19,7 @@ const ProductCard = ({product}) => {
     <div 
         key={`${product.id}`}
         className="group w-full min-w-[250px] max-w-[300px] flex-shrink-0 relative flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md cursor-pointer my-4"
-        onClick={() => navigate(`/products/${product.category.slug}/${product.subcategory.slug}/${product.id}`, scrollTo(0,0))}
+        onClick={() => navigate(`/products/${product.id}`, scrollTo(0,0))}
       >
         {/* discount text when have discount */}
         {

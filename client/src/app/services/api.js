@@ -50,8 +50,11 @@ export const fetchProducts = async ({ searchText, statusId, pageSize, is_promoti
   
 
 export const fetchProductsById = async (id) => {
-  const products = products.filter(product=> product._id === id) || [];
-  return products;
+  return request(`/menus/${id}`);
+};
+
+export const fetchRelatedProducts = async (id) => {
+  return request(`/menus/${id}/related`);
 };
 
 export const searchProducts = async (query) => {

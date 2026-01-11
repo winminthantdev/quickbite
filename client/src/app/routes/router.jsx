@@ -28,8 +28,7 @@ const router = createBrowserRouter([
       {path:'products' , element: <AllProducts />},
       {path:'products/promotions' , element: <PromotionsPage />},
       {path:'products/:category' , element: <ProductCategory />},
-      {path:'products/:category/:subcategory' , element: <ProductCategory />},
-      {path:'products/:category/:subcategory/:id' , element: <ProductDetails />},
+      {path:'products/:id' , element: <ProductDetails />},
     ],
   },
 
