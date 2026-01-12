@@ -57,7 +57,7 @@ const ProductCard = ({product}) => {
             <div className="flex items-center gap-1">
               <img src={assets.delivery_icon} className="w-4 h-4" alt="" />
               {product.promotion?.isActive ? (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center">
                 <span className="text-gray-400 line-through">
                   Ks. {parseFloat(product.price).toLocaleString()}
                 </span>
@@ -66,7 +66,7 @@ const ProductCard = ({product}) => {
                 </span>
               </div>
             ) : (
-              <span className="text-lg font-semibold">
+              <span className="font-semibold">
                 Ks. {parseFloat(product.price).toLocaleString()}
               </span>
             )}

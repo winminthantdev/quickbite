@@ -1,8 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchProducts } from '@/services/api';
 import ProductCard from '../../../components/ui/ProductCard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import Pagination from '../../../components/ui/Pagination'
 import { useState } from 'react';
 import Title from '../../../components/ui/Title';

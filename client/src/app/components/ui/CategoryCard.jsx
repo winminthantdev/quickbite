@@ -25,7 +25,7 @@ const CategoryCard = () => {
         ) : (
           categories.map((category) => (
           <div key={category.slug} className="text-center flex-shrink-0">
-            <Link to={`/products/${category.slug}`} className="block">
+            <Link to={`/products/category/${category.slug}`} className="block">
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden flex items-center justify-center border-2 border-green-500 transition hover:border-green-600 shadow-md">
                 <img
                   src={category.image}

@@ -3,53 +3,30 @@ import Title from '@/components/ui/Title';
 import { Link, useLocation, useParams } from 'react-router';
 import ProductCard from '@/components/ui/ProductCard';
 import { fetchProducts } from '@/services/api';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Pagination from '@/components/ui/Pagination';
+import CardLoader from '@/components/ui/CardLoader';
+import { useQuery } from '@tanstack/react-query';
 
 const ProductCategory = () => {
   
-  const { category, subcategory } = useParams();
-  const location = useLocation();
-  const stateProducts = location.state?.products ?? null;
-
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { category, subcategory } = useParams();  
   const [page, setPage] = useState(1);
   
   const PAGESIZE = 10;
 
-  useEffect(() => {
-    const getProducts = async () => {
-      setLoading(true);
-      if (stateProducts) {
-        setProducts(stateProducts);
-        setLoading(false);
-        return;
-      }
-      try {
-         const allProducts = await fetchProducts();
-        const filtered = subcategory
-          ? allProducts.filter(
-            (item) =>
-              item.subCategory?.toLowerCase() === subcategory.toLowerCase() &&
-              item.category?.toLowerCase() === category.toLowerCase()
-          )
-          : allProducts.filter(
-            (item) => item.category?.toLowerCase() === category.toLowerCase()
-          );
 
-        setProducts(filtered);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+   //  Data Fetching Logic
+  const fetchMenusFun = async () => {
+    const productData = await fetchProducts({ pageSize: PAGESIZE, is_promotion:true }); 
 
-    getProducts();
-  }, [category, subcategory]);
+    return productData.data;
+  };
+
+  const { data: products = [], isLoading } = useQuery({
+    queryKey: ["menus", "products"], 
+    queryFn: fetchMenusFun
+  });
+  
 
   const totalPages = Math.max(1, Math.ceil(products.length/PAGESIZE));
   const pageItems = products.slice((page-1) * PAGESIZE,page * PAGESIZE)  
@@ -59,7 +36,7 @@ const ProductCategory = () => {
       <p>
         <Link to={"/"}>Home</Link> /
         <Link to={"/products"}> Products</Link> /
-        <Link to={`/products/${category.toLowerCase()}`}> {category}</Link>
+        <Link to={`/products/category/${category}`}> {category}</Link>
         {subcategory && (
           <>
             <span>/</span>
@@ -68,8 +45,8 @@ const ProductCategory = () => {
         )}
       </p>
 
-      {loading ? (
-        <p className="text-center py-8 text-gray-500"><FontAwesomeIcon spin icon={faSpinner} className='me-2' />Loading products...</p>
+      {isLoading ? (
+        [...Array(10)].map((_, i) => <CardLoader key={i} />)
       ) : (
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 place-items-center overflow-x-auto scrollbar-hide mt-6'>
           {pageItems.length > 0 ? (

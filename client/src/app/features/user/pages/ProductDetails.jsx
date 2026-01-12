@@ -5,8 +5,7 @@ import ProductCard from '@/components/ui/ProductCard';
 import Title from '@/components/ui/Title';
 import { addToCart } from '@/store/cartSlice'
 import { useDispatch } from 'react-redux';
-import { fetchProducts } from '@/services/api';
-import { fetchProductsById, fetchRelatedProducts } from '../../../services/api';
+import { fetchProductsById, fetchRelatedProducts } from '@/services/api';
 import { useQuery } from '@tanstack/react-query';
 
 const ProductDetails = () => {
@@ -23,7 +22,6 @@ const ProductDetails = () => {
     };
 
     const {data : menu = [], isLoading, isFetching} = useQuery({queryKey: ["menus"], queryFn: fetchMenusById})
-
 
 
    const fetchRelatedMenus = async () => {
@@ -52,8 +50,6 @@ const ProductDetails = () => {
     const handleAddToCart = () => {
         dispatch(addToCart(menu));
     };
-
-    console.log("Menu show : ",menu);
     
 
     if (isLoading || isFetching) {
@@ -69,8 +65,8 @@ const ProductDetails = () => {
             <p>
                 <Link to={"/"}>Home</Link> /
                 <Link to={"/products"}> Products</Link> /
-                <Link to={`/products/${menu.category.slug}`}> {menu.category.name}</Link> /
-                <Link to={`/products/${menu.category.slug}/${menu.subcategory.slug}`}> {menu.subcategory.name}</Link> /
+                <Link to={`/products/category/${menu.category.slug}`}> {menu.category.name}</Link> /
+                <Link to={`/products/category/${menu.category.slug}/${menu.subcategory.slug}`}> {menu.subcategory.name}</Link> /
                 <span className="text-primary"> {menu.name}</span>
             </p>
 
@@ -105,14 +101,14 @@ const ProductDetails = () => {
 
                     {/* pricing */}
                     <div className="mt-6">
-                        <p className={`${menu.promotion.isActive ? 'text-gray-500/70 line-through inline-block me-2' : 'text-2xl font-medium'}`}>
+                        <p className={`${menu.promotion?.isActive ? 'text-gray-500/70 line-through inline-block me-2' : 'text-2xl font-medium'}`}>
                             MMK: {menu.price}
                         </p>
-                        {menu.promotion.isActive && (
+                        {menu.promotion?.isActive && (
                             <>
-                                <p className="inline-block">{menu.promotion.discountPercent}% off</p>
+                                <p className="inline-block">{menu.promotion?.discountPercent}% off</p>
                                 <p className="text-2xl font-medium">
-                                    MMK: {menu.price - (menu.price * menu.promotion.discountPercent / 100)}
+                                    MMK: {menu.price - (menu.price * menu.promotion?.discountPercent / 100)}
                                 </p>
                             </>
                         )}

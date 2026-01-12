@@ -25,10 +25,21 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { index: true, element: <Home /> },
-      {path:'products' , element: <AllProducts />},
-      {path:'products/promotions' , element: <PromotionsPage />},
-      {path:'products/:category' , element: <ProductCategory />},
-      {path:'products/:id' , element: <ProductDetails />},
+      {
+        path: "/products",
+        children: [
+          {index: true , element: <AllProducts />},
+          {path:'promotions' , element: <PromotionsPage />},
+          {
+            path: "category",
+            children: [
+              {path:':category' , element: <ProductCategory />},
+              {path:':category/:subcategory' , element: <ProductCategory />},
+            ]
+          },
+          {path:':id' , element: <ProductDetails />},
+        ]
+      }
     ],
   },
 
