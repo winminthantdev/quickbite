@@ -37,13 +37,31 @@ export const fetchSubCategories = async () => {
 
 // ------- PRODUCTS --------
 
-export const fetchProducts = async ({ searchText, statusId, pageSize, is_promotion }) => {
+export const fetchProducts = async ({ 
+  searchText, 
+  statusId, 
+  pageSize, 
+  page, 
+  is_promotion, 
+  category, 
+  subcategory 
+}) => {
   const params = new URLSearchParams();
 
+  // Basic Filters
   if (searchText) params.append('search', searchText);
   if (statusId) params.append('status_id', statusId);
+  
+  // Pagination
   if (pageSize) params.append('per_page', pageSize);
-  if (pageSize) params.append('is_promotion', is_promotion);
+  if (page) params.append('page', page);
+
+  // Category & Subcategory
+  if (category) params.append('category', category);
+  if (subcategory) params.append('subcategory', subcategory);
+
+  // Boolean Promotion Filter
+  if (is_promotion) params.append('is_promotion', 'true');
 
   return request(`/menus?${params.toString()}`);
 };

@@ -11,22 +11,30 @@ const ProductCategory = () => {
   
   const { category, subcategory } = useParams();  
   const [page, setPage] = useState(1);
-  
   const PAGESIZE = 10;
 
+  const fetchMenusFun = async ({ queryKey }) => {
 
-   //  Data Fetching Logic
-  const fetchMenusFun = async () => {
-    const productData = await fetchProducts({ pageSize: PAGESIZE, is_promotion:true }); 
+    const [_key, { cat, sub, pg }] = queryKey; 
 
-    return productData.data;
+    const productData = await fetchProducts({ 
+      pageSize: PAGESIZE,
+      page: pg,
+      category: cat,   
+      subcategory: sub    
+    }); 
+
+    return productData; 
   };
 
-  const { data: products = [], isLoading } = useQuery({
-    queryKey: ["menus", "products"], 
-    queryFn: fetchMenusFun
-  });
+  const { data, isLoading } = useQuery({
   
+    queryKey: ["menus", { cat: category, sub: subcategory, pg: page }], 
+    queryFn: fetchMenusFun,
+    keepPreviousData: true,
+  });
+
+  const products = data?.data || [];
 
   const totalPages = Math.max(1, Math.ceil(products.length/PAGESIZE));
   const pageItems = products.slice((page-1) * PAGESIZE,page * PAGESIZE)  
