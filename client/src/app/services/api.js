@@ -41,9 +41,10 @@ export const fetchProducts = async ({
   searchText, 
   statusId, 
   pageSize, 
-  page, 
-  is_promotion, 
-  category, 
+  page,
+  is_promotion,
+  is_bestseller,
+  category,
   subcategory 
 }) => {
   const params = new URLSearchParams();
@@ -62,6 +63,9 @@ export const fetchProducts = async ({
 
   // Boolean Promotion Filter
   if (is_promotion) params.append('is_promotion', 'true');
+
+  // Boolean Promotion Filter
+  if (is_bestseller) params.append('is_bestseller', 'true');
 
   return request(`/menus?${params.toString()}`);
 };

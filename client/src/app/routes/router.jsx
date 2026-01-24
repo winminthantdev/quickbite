@@ -17,6 +17,7 @@ import { authUtils } from "@/lib/utils";
 import MainLayout from "../components/core/layouts/MainLayout";
 import ProfilePage from "../features/user/pages/ProfilePage";
 import PromotionsPage from "../features/user/pages/PromotionPage";
+import BestSellerPage from "@/features/user/pages/BestSellerPage.jsx";
 
 const router = createBrowserRouter([
 
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
         children: [
           {index: true , element: <AllProducts />},
           {path:'promotions' , element: <PromotionsPage />},
+          {path:'bestsellers' , element: <BestSellerPage />},
           {
             path: "category",
             children: [

@@ -11,63 +11,45 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useNavigate } from 'react-router';
+import {useQuery} from "@tanstack/react-query";
 
 const BestSeller = () => {
   const sectionRef = useRef(null);
-  const [products, setProducts] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
+  // Intersection Observer for animation
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true)
+          }
+        },
+        { threshold: 0.2 }
+    )
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    if (sectionRef.current) observer.observe(sectionRef.current)
+    return () => observer.disconnect();
+  }, [])
 
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
+  //  Data Fetching Logic
+  const fetchMenusFun = async () => {
+    const promotionData = await fetchProducts({ pageSize: 20, is_bestseller:true });
 
-    // fetch products
+    return promotionData.data;
+  };
 
-  useEffect(() => {
-    // Fetch products
-    const getProducts = async () => {
-      setLoading(true);
-      try {
-        const allProducts = await fetchProducts();
-        const bestSellers = allProducts
-          .filter(product => product.bestSeller)
-          .sort(() => Math.random() - 0.5);
-        setProducts(bestSellers);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getProducts();
-  }, []);
+  const { data: bestseller = [], isLoading } = useQuery({
+    queryKey: ["menus", "bestseller"],
+    queryFn: fetchMenusFun
+  });
 
   const handleSeeAllBtn = () => {
     console.log("YOU ARE CLICKING SEE ALL ...");
 
-    navigate('/products/bestsellers', {state: {products: products}})
+    navigate('/products/bestsellers')
   }
 
   return (
@@ -76,12 +58,12 @@ const BestSeller = () => {
       className={`transition-all duration-700 ${isVisible ? 'bottom_to_tops' : 'opacity-50'}`}
     >
       <Title title="Best Seller"  clickSeeAll={handleSeeAllBtn} />
-      {loading ? (
+      {isLoading ? (
         <p className="text-center py-8 text-gray-500">
           <FontAwesomeIcon spin icon={faSpinner} className='me-2' /> Loading products...
         </p>
       ) : (
-        products.length > 0 ? (
+          bestseller.length > 0 ? (
           <Swiper
             modules={[Navigation]}
             navigation
@@ -89,7 +71,7 @@ const BestSeller = () => {
             spaceBetween={12}       
             className="mt-6"
           >
-            {products.map((product) => (
+            {bestseller.map((product) => (
               <SwiperSlide key={product._id} className="!w-auto"> 
                 <ProductCard product={product} />
               </SwiperSlide>
