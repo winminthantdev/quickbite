@@ -91,7 +91,7 @@ const Navbar = () => {
                     {categories?.map((category, index) => (
                         <div key={index} className="relative group">
                             <Link
-                                to={`/products/${category.slug}`}
+                                to={`/products/category/${category.slug}`}
                                 className="flex items-center text-xs xl:text-md space-x-2"
                             >
                                 <span className="truncate whitespace-nowrap overflow-hidden">
@@ -107,7 +107,7 @@ const Navbar = () => {
                                         {category.subcategories.map((subCat, idx) => (
                                             <Link
                                                 key={idx}
-                                                to={`/products/${category.slug}/${subCat.toLowerCase()}`}
+                                                to={`/products/category/${category.slug}/${subCat.slug}`}
                                                 className="text-nowrap hover:text-primary"
                                             >
                                                 {subCat}
