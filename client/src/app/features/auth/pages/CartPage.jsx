@@ -1,248 +1,295 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addToCart, removeFromCart, clearCart, getCartItemsCount, totalPrice, updateCartItem, itemTotalPrice } from '@/store/cartSlice'
-import { assets } from '@/assets/assets'
-import { useNavigate } from 'react-router'
-import PopupModal from '@/components/ui/PopupModal'
-import { checkAuth } from '@/services/authService'
-import { createOrder } from '@/services/api'
-import toast from 'react-hot-toast'
-import Login from '@/components/ui/Login'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeFromCart, clearCart, getCartItemsCount, totalPrice, updateCartItem } from '@/store/cartSlice';
+import { assets } from '@/assets/assets';
+import { useNavigate } from 'react-router';
+import PopupModal from '@/components/ui/PopupModal';
+import { checkAuth } from '@/services/authService';
+import {createOrder, fetchAddresses} from '@/services/api';
+import toast from 'react-hot-toast';
+import Login from '@/components/ui/Login';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus, faTrashCan, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import {useQuery} from "@tanstack/react-query";
 
 const CartPage = () => {
-  const [showAddress, setShowAddress] = useState(false)
-  const [selectedAddress, setSelectedAddress] = useState([])
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // --- State ---
+  const [showAddress, setShowAddress] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentOption, setPaymentOption] = useState("COD");
   const [showModal, setShowModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false)
-  const [orderData, setOrderData] = useState(null)
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [orderData, setOrderData] = useState(null);
 
+  // --- Redux Data ---
   const products = useSelector((state) => state.cart.items);
   const totalItems = useSelector(getCartItemsCount);
   const totalPrices = useSelector(totalPrice);
 
-  const dummyAddress = [
-    {
-      street: "No.123 Main Road",
-      city: "Mandalay",
-      state: "MDY",
-      country: "Myanmar",
-    },
-    {
-      street: "No.52 Front Street",
-      city: "Yangon",
-      state: "YGN",
-      country: "Myanmar",
-    },
-  ];
+  // --- Constants & Calculations ---
+  const SHIPPING_FEE = 3000;
+  const TAX_RATE = 0.015;
+  const taxAmount = useMemo(() => Math.round(totalPrices * TAX_RATE), [totalPrices]);
+  const grandTotal = totalPrices + SHIPPING_FEE + taxAmount;
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const handleUpdateItem = (id, qty) => {
-    dispatch(updateCartItem({ _id: id, quantity: qty }))
-  }
-
-  const handleRemoveItem = (id) => {
-    dispatch(removeFromCart(id));
-  }
+    const { data: addresses = [], isAddressLoading } = useQuery({
+        queryKey: ["user", "addresses"],
+        queryFn: async () => {
+            const res = await fetchAddresses();
+            return res.data || [];
+        },
+        enabled: !!localStorage.getItem('token'),
+        staleTime: 1000 * 60 * 10,
+    });
 
   useEffect(() => {
-    setSelectedAddress(dummyAddress[0])
-  }, [])
+    setSelectedAddress(addresses[0]);
+  }, []);
 
-  const shipping =  3000;
-  const tax = Math.round(totalPrices * 0.015);
-  const grandtotal = totalPrices + shipping + tax;
-
-  const handleOrder = async () => {
-
-    if (checkAuth()) {
-
-      if (products.length > 0) {
-
-        const orderData = {
-          items: products,
-          address: selectedAddress,
-          paymentMethod: paymentOption,
-          shipping : shipping,
-          tax : tax,
-          grandtotal : grandtotal,
-          totalAmount: totalPrices
-        };
-
-        if (paymentOption === "COD") {
-
-
-          try {
-            const res = await createOrder(orderData);
-            console.log(res);
-            if (res.success) {
-              setOrderData(res.order);
-              setShowModal(true);
-              console.log("Saved Order:", res);
-              localStorage.removeItem("order");
-              dispatch(clearCart());
-            } else {
-              toast.error(res.message)
-            }
-          } catch (err) {
-            toast.error("Something went wrong!");
-          }
-
-        } else {
-          navigate("/my-account/payments", {state: {orderData}});
-        }
-
-      } else {
-        toast.error("Your cart is empty!");
-      }
-
-    } else {
-      toast.error("Please login to order");
-      setShowLoginModal(true);
-    }
-
+  // --- Handlers ---
+  const handleUpdateQty = (id, currentQty, delta) => {
+    const newQty = currentQty + delta;
+    newQty > 0
+        ? dispatch(updateCartItem({ id, quantity: newQty }))
+        : dispatch(removeFromCart(id));
   };
 
-  return (
-    <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 pt-20 mx-auto">
-      <div className='flex-1 max-w-4xl'>
-        <h1 className="text-3xl font-medium mb-6">
-          Shopping Cart <span className="text-sm text-indigo-500">{totalItems} Items</span>
-        </h1>
+  const handleOrder = async () => {
+    if (!checkAuth()) {
+      setShowLoginModal(true);
+      return toast.error("Please login to continue");
+    }
 
-        {
-          products.length === 0 && (
-            <div className="w-full h-[50vh] flex justify-center items-center py-16 max-w-6xl px-6 pt-20 mx-auto">
-              <div className="text-center">
-                <h1 className='text-xl font-bold mb-5'>Your shopping cart is empty</h1>
-                <button className="w-full cursor-pointer flex justify-center text-primary gap-2 font-medium" onClick={() => navigate("/products")}>
-                  <img src={assets.arrow_right_icon_colored} alt="back-arrow" />
-                  Start Shopping
-                </button>
-              </div>
-            </div>
-          )
+    if (products.length === 0) return toast.error("Your cart is empty");
+
+    const orderPayload = {
+      items: products.map(item => ({
+        menu_id: item.id,
+        quantity: item.quantity,
+        unit_price: item.final_price || item.price,
+      })),
+      address: selectedAddress,
+      payment_method: paymentOption,
+      shipping_fee: SHIPPING_FEE,
+      tax_amount: taxAmount,
+      total_amount: grandTotal
+    };
+
+    try {
+      if (paymentOption === "COD") {
+        const res = await createOrder(orderPayload);
+        if (res.success) {
+          setOrderData(res.order);
+          setShowModal(true);
+          dispatch(clearCart());
         }
+      } else {
+        navigate("/payment", { state: { orderPayload } });
+      }
+    } catch (error) {
+      toast.error("Order failed. Please try again.");
+    }
+  };
 
-        {products.length > 0 && <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 text-base font-medium pb-3">
-          <p className="text-left">Product Details</p>
-          <p className="text-center">Subtotal</p>
-          <p className="text-center">Action</p>
-        </div>}
-
-        {products.map((product, index) => {
-          const itemPrice = itemTotalPrice({ cart: { items: products } }, product._id);
-
-          return (
-            <div key={index} className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3">
-              <div className="flex items-center md:gap-6 gap-3">
-                <div className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded overflow-hidden">
-                  <img className="max-w-full object-cover" src={product.image[0]} alt={product.name}
-                    onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product.subCategory.toLowerCase()}/${product._id}`, scrollTo(0, 0))}
-                  />
-                </div>
-                <div>
-                  <p className="hidden md:block font-semibold">{product.name}</p>
-                  <div className="font-normal text-gray-500/70">
-                    <p>Type: <span>{product.subCategory || "N/A"}</span></p>
-                    <div className='flex items-center'>
-                      <p>Qty:</p>
-                      <div className="flex justify-center items-center gap-2 ms-2">
-                        <FontAwesomeIcon icon={faPlus} className='text-xs' onClick={()=>handleUpdateItem(product._id, Number(product.quantity + 1))}/>
-                        <span                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               className='selectnone font-bold'>{product.quantity}</span>
-                        <FontAwesomeIcon icon={faMinus} className='text-xs' onClick={()=>handleUpdateItem(product._id, Number(Math.max(0, product.quantity - 1)))}/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <p className="text-center">${itemPrice}</p>
-              <button className="cursor-pointer mx-auto" onClick={() => handleRemoveItem(product._id)}>
-                <img src={assets.remove_icon} className='w-6 h-6 inline-block' alt="remove" />
-              </button>
-            </div>
-          )
-        })}
-
-        {products.length > 0 && (
-          <button className="group cursor-pointer flex items-center mt-8 gap-2 text-indigo-500 font-medium" onClick={() => navigate("/products")}>
-            <img src={assets.arrow_right_icon_colored} alt="back-arrow" />
-            Continue Shopping
+  // --- Early Return: Empty State ---
+  if (products.length === 0) {
+    return (
+        <div className="min-h-[70vh] flex flex-col items-center justify-center pt-20">
+          <div className="bg-gray-50 p-12 rounded-full mb-6 text-6xl">🛒</div>
+          <h2 className="text-2xl font-bold text-gray-800">Your cart is empty</h2>
+          <p className="text-gray-500 mt-2 mb-8 text-center px-6">Explore our menu and add some delicious items to your cart!</p>
+          <button
+              onClick={() => navigate("/products")}
+              className="bg-primary text-white px-10 py-3 rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all"
+          >
+            Browse Products
           </button>
-        )}
+        </div>
+    );
+  }
+
+  return (
+      <div className="container mx-auto px-4 lg:px-8 py-10 pt-32 min-h-screen">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight">
+            Shopping Cart <span className="text-lg font-medium text-gray-400 ml-2">({totalItems})</span>
+          </h1>
+          <button
+              onClick={() => navigate("/products")}
+              className="text-primary font-bold text-sm hover:underline flex items-center gap-2"
+          >
+            <FontAwesomeIcon icon={faArrowLeft} /> Continue Shopping
+          </button>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-12">
+          {/* Left: Item List */}
+          <div className="flex-1">
+            <div className="hidden md:grid grid-cols-5 pb-4 border-b border-gray-100 text-[11px] font-black text-gray-400 uppercase tracking-widest">
+              <div className="col-span-3">Item Details</div>
+              <div className="text-center">Quantity</div>
+              <div className="text-right">Total</div>
+            </div>
+
+            <div className="divide-y divide-gray-50">
+              {products.map((item) => (
+                  <CartItemRow
+                      key={item.id}
+                      item={item}
+                      onUpdateQty={handleUpdateQty}
+                      onRemove={() => dispatch(removeFromCart(item.id))}
+                      onNavigate={() => navigate(`/products/${item.id}`)}
+                  />
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Sidebar */}
+          <aside className="lg:w-96">
+            <OrderSummaryCard
+                totalPrices={totalPrices}
+                shipping={SHIPPING_FEE}
+                tax={taxAmount}
+                grandTotal={grandTotal}
+                selectedAddress={selectedAddress}
+                setSelectedAddress={setSelectedAddress}
+                addresses={addresses}
+                paymentOption={paymentOption}
+                setPaymentOption={setPaymentOption}
+                onOrder={handleOrder}
+                showAddress={showAddress}
+                setShowAddress={setShowAddress}
+            />
+          </aside>
+        </div>
+
+        {showModal && <PopupModal onClose={() => setShowModal(false)} orderData={orderData} />}
+        {showLoginModal && <Login onClose={() => setShowLoginModal(false)} />}
+      </div>
+  );
+};
+
+// --- Sub-Components ---
+
+const CartItemRow = ({ item, onUpdateQty, onRemove, onNavigate }) => (
+    <div className="flex flex-col md:grid md:grid-cols-5 gap-6 py-8 group transition-all">
+      <div className="col-span-3 flex items-center gap-5">
+        <div
+            onClick={onNavigate}
+            className="w-24 h-24 bg-gray-50 rounded-2xl overflow-hidden cursor-pointer border border-gray-100 shrink-0"
+        >
+          <img className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={item.images?.[0] || item.image?.[0]} alt={item.name} />
+        </div>
+        <div className="space-y-1">
+          <h3 className="font-bold text-gray-800 text-lg leading-tight">{item.name}</h3>
+          <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">
+            {item.category?.name || "General"}
+          </p>
+          <button onClick={onRemove} className="text-red-400 text-[11px] font-bold uppercase tracking-tighter hover:text-red-600 transition-colors flex items-center gap-1 mt-2">
+            <FontAwesomeIcon icon={faTrashCan} /> Remove Item
+          </button>
+        </div>
       </div>
 
-      {products.length > 0 &&
-        <div className="max-w-[360px] w-full bg-gray-100/40 p-5 max-md:mt-16 border border-gray-300/70">
-          <h2 className="text-xl md:text-xl font-medium">Order Summary</h2>
-          <hr className="border-gray-300 my-5" />
-
-          <div className="mb-6">
-            <p className="text-sm font-medium uppercase">Delivery Address</p>
-            <div className="relative flex justify-between items-start mt-2">
-              <p className="text-gray-500">
-                {selectedAddress
-                  ? `${selectedAddress.street}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.country}`
-                  : "No address found"
-                }
-              </p>
-              <button onClick={() => setShowAddress(!showAddress)} className="text-indigo-500 hover:underline cursor-pointer">
-                Change
-              </button>
-              {showAddress && (
-                <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full z-10">
-                  {dummyAddress.map((address, index) => (
-                    <p key={index} onClick={() => { setSelectedAddress(address); setShowAddress(false) }} className="text-gray-500 p-2 hover:bg-gray-100 cursor-pointer">
-                      {address.street}, {address.city}, {address.state}, {address.country}
-                    </p>
-                  ))}
-                  <p onClick={() => navigate("/my-account/add-address")} className="text-indigo-500 text-center cursor-pointer p-2 hover:bg-indigo-500/10">
-                    Add address
-                  </p>
-                </div>
-              )}
-            </div>
-            <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
-
-            <select className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none" onChange={e => setPaymentOption(e.target.value)}>
-              <option value="COD">Cash On Delivery</option>
-              <option value="Online">Online Payment</option>
-            </select>
-          </div>
-
-          <hr className="border-gray-300" />
-
-          <div className="text-gray-500 mt-4 space-y-2">
-            <p className="flex justify-between">
-              <span>Price</span><span>{totalPrices} MMK</span>
-            </p>
-            <p className="flex justify-between">
-              <span>Shipping Fee</span><span className="text-green-600">{shipping}</span>
-            </p>
-            <p className="flex justify-between">
-              <span>Tax (2%)</span><span>{tax} MMK</span>
-            </p>
-            <p className="flex justify-between text-lg font-medium mt-3">
-              <span>Total Amount:</span><span>{grandtotal} MMK</span>
-            </p>
-          </div>
-
-          <button className="w-full py-3 mt-6 cursor-pointer bg-primary/90 rounded-lg text-white font-medium hover:bg-primary transition" onClick={handleOrder}>
-            {paymentOption === "COD" ? "Place Order" : "Proceed to Checkout"}
+      <div className="flex justify-center items-center">
+        <div className="flex items-center gap-4 bg-gray-50 p-2 rounded-xl border border-gray-100">
+          <button onClick={() => onUpdateQty(item.id, item.quantity, -1)} className="w-8 h-8 flex items-center justify-center hover:bg-white rounded-lg text-gray-400 hover:text-gray-900 transition-all">
+            <FontAwesomeIcon icon={faMinus} size="xs" />
           </button>
-
+          <span className="font-bold text-gray-900 min-w-5 text-center">{item.quantity}</span>
+          <button onClick={() => onUpdateQty(item.id, item.quantity, 1)} className="w-8 h-8 flex items-center justify-center hover:bg-white rounded-lg text-gray-400 hover:text-gray-900 transition-all">
+            <FontAwesomeIcon icon={faPlus} size="xs" />
+          </button>
         </div>
-      }
-      {/* Show Modal when true */}
-      {showModal && <PopupModal onClose={() => setShowModal(false)} orderData={orderData} />}
-      {/* Show Modal when true */}
-      {showLoginModal && <Login onClose={() => setShowLoginModal(false)} />}
-    </div>
-  )
-}
+      </div>
 
-export default CartPage
+      <div className="flex md:flex-col justify-between md:justify-center items-center md:items-end font-black text-gray-900 text-lg">
+        <span className="md:hidden text-xs text-gray-400 font-bold uppercase">Subtotal</span>
+        {(item.price * item.quantity).toLocaleString()} <span className="text-xs ml-1">MMK</span>
+      </div>
+    </div>
+);
+
+const OrderSummaryCard = ({
+                            totalPrices, shipping, tax, grandTotal,
+                            selectedAddress, setSelectedAddress, addresses,
+                            paymentOption, setPaymentOption, onOrder,
+                            showAddress, setShowAddress
+                          }) => (
+    <div className="bg-white border border-gray-100 shadow-2xl shadow-gray-200/50 rounded-[2.5rem] p-8 sticky top-32">
+      <h2 className="text-xl font-black text-gray-900 mb-8">Summary</h2>
+
+      <div className="space-y-6 mb-8">
+        <div className="space-y-2">
+          <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Shipping Address</label>
+          <div className="relative">
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 group">
+              <p className="text-xs text-gray-600 font-medium truncate pr-4">
+                {selectedAddress ? `${selectedAddress.street}, ${selectedAddress.city}` : "Select Address"}
+              </p>
+              <button onClick={() => setShowAddress(!showAddress)} className="text-primary text-xs font-black uppercase">Edit</button>
+            </div>
+
+            {showAddress && (
+                <div className="absolute top-full left-0 w-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden">
+                  {addresses.map((addr, i) => (
+                      <button
+                          key={i}
+                          className="w-full p-4 text-left text-xs text-gray-600 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors"
+                          onClick={() => { setSelectedAddress(addr); setShowAddress(false); }}
+                      >
+                        {addr.street}, {addr.city}
+                      </button>
+                  ))}
+                </div>
+            )}
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Payment Method</label>
+          <select
+              className="w-full bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs font-bold text-gray-700 appearance-none outline-none focus:border-primary"
+              value={paymentOption}
+              onChange={e => setPaymentOption(e.target.value)}
+          >
+            <option value="COD">Cash on Delivery</option>
+            <option value="Online">Online Banking</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="space-y-4 py-8 border-y border-gray-50">
+        <div className="flex justify-between text-xs font-bold text-gray-500">
+          <span>Order Subtotal</span>
+          <span>{totalPrices.toLocaleString()} MMK</span>
+        </div>
+        <div className="flex justify-between text-xs font-bold text-gray-500">
+          <span>Estimated Delivery</span>
+          <span className="text-green-600">+{shipping.toLocaleString()} MMK</span>
+        </div>
+        <div className="flex justify-between text-xs font-bold text-gray-500">
+          <span>Taxes (1.5%)</span>
+          <span>{tax.toLocaleString()} MMK</span>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center py-8">
+        <span className="text-sm font-black text-gray-900 uppercase">Grand Total</span>
+        <span className="text-3xl font-black text-primary tracking-tighter">{grandTotal.toLocaleString()} <span className="text-xs">MMK</span></span>
+      </div>
+
+      <button
+          onClick={onOrder}
+          className="w-full py-5 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-1 transition-all active:scale-95"
+      >
+        {paymentOption === "COD" ? "Place Your Order" : "Proceed to Payment"}
+      </button>
+    </div>
+);
+
+export default CartPage;

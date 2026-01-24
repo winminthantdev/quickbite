@@ -22,7 +22,7 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const item = action.payload;
-      const prevItem = state.items.find((i) => i._id === item._id);
+      const prevItem = state.items.find((i) => i.id === item.id);
 
       if (prevItem) {
         prevItem.quantity += 1;
@@ -31,13 +31,26 @@ const cartSlice = createSlice({
         state.items.push({ ...item, quantity: 1 });
         toast.success("Added to cart");
       }
-
       updateLocalStorage(state.items);
     },
 
     removeFromCart: (state, action) => {
-      state.items = state.items.filter((i) => i._id !== action.payload);
+      state.items = state.items.filter((i) => i.id !== action.payload);
       toast.success("Removed from cart");
+      updateLocalStorage(state.items);
+    },
+
+    updateCartItem: (state, action) => {
+      const { id, quantity } = action.payload;
+      const item = state.items.find((i) => i.id === id);
+
+      if (item) {
+        if (quantity <= 0) {
+          state.items = state.items.filter((i) => i.id !== id);
+        } else {
+          item.quantity = quantity;
+        }
+      }
       updateLocalStorage(state.items);
     },
 
@@ -57,18 +70,6 @@ const cartSlice = createSlice({
 
     clearCart: (state) => {
       state.items = [];
-      updateLocalStorage(state.items);
-    },
-
-    updateCartItem: (state, action) => {
-      const { _id, quantity } = action.payload;
-      const item = state.items.find((i) => i._id === _id);
-
-      if (item) {
-        item.quantity = quantity;
-        toast.success("Quantity updated");
-      }
-
       updateLocalStorage(state.items);
     },
   },

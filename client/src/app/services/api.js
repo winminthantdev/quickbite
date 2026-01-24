@@ -95,6 +95,28 @@ export const searchProducts = async (query) => {
 };
 
 
+export const fetchAddresses = async () => {
+  const auth = localStorage.getItem("auth");
+
+  if (!auth) {
+    return { success: false, message: "Not authenticated" };
+  }
+
+  const { token } = JSON.parse(auth);
+
+  if (!token) {
+    return { success: false, message: "Not authenticated" };
+  }
+
+  return request(`/user/addresses`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
 
 // ------- END FETCH DATA --------
 

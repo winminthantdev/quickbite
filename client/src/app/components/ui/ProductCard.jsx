@@ -12,7 +12,14 @@ const ProductCard = ({product}) => {
   
 
   const handleAddToCart = () =>{
-      dispatch(addToCart(product));   
+    dispatch(addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      images: product.images,
+      promotion: product.promotion,
+      category: product.category?.name
+    }));
   };
 
   return (    
