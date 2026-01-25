@@ -66,33 +66,38 @@ const CartPage = () => {
 
     if (products.length === 0) return toast.error("Your cart is empty");
 
-    const orderPayload = {
-      items: products.map(item => ({
-        menu_id: item.id,
-        quantity: item.quantity,
-        unit_price: item.final_price || item.price,
-      })),
-      address: selectedAddress,
-      payment_method: paymentOption,
-      shipping_fee: SHIPPING_FEE,
-      tax_amount: taxAmount,
-      total_amount: grandTotal
-    };
+      const orderPayload = {
+          ordertype_id: 2,
+          paymenttype_id: paymentOption === "COD" ? 2 : null,
+          address_id: selectedAddress?.id,
+          subtotal: products.reduce((acc, item) => acc + (item.price * item.quantity), 0),
+          discount: 0,
+          delivery_fee: SHIPPING_FEE,
+          service_fee: taxAmount,
+          total: grandTotal,
+          items: products.map(item => ({
+              menu_id: item.id,
+              quantity: item.quantity,
+              unit_price: item.final_price || item.price,
+              discount: item.discount || 0,
+          }))
+      };
 
-    try {
-      if (paymentOption === "COD") {
-        const res = await createOrder(orderPayload);
-        if (res.success) {
-          setOrderData(res.order);
-          setShowModal(true);
-          dispatch(clearCart());
-        }
-      } else {
-        navigate("/payment", { state: { orderPayload } });
+      try {
+          const res = await createOrder(orderPayload);
+
+          if (res.success) {
+              if (paymentOption === "COD") {
+                  setOrderData(res.order);
+                  setShowModal(true);
+                  dispatch(clearCart());
+              } else {
+                  navigate("/payment", { state: { orderId: res.order.id, total: grandTotal } });
+              }
+          }
+      } catch (error) {
+          toast.error("Order failed. Please try again.");
       }
-    } catch (error) {
-      toast.error("Order failed. Please try again.");
-    }
   };
 
   // --- Early Return: Empty State ---

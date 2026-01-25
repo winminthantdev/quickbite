@@ -1,15 +1,32 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const request = async (endpoint, options = {}) => {
+  const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+  const token = auth?.token;
+
+  const defaultHeaders = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  };
+
+  if (token) {
+    defaultHeaders["Authorization"] = `Bearer ${token}`;
+  }
+
   try {
     const res = await fetch(`${BASE_URL}${endpoint}`, {
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
       ...options,
+      headers: { ...defaultHeaders, ...options.headers },
     });
 
+    if (res.status === 401) {
+      console.error("Unauthorized - clearing session");
+      localStorage.removeItem("auth");
+    }
+
     if (!res.ok) {
-      throw new Error(`API error: ${res.status}`);  
+      const errorData = await res.json();
+      throw new Error(errorData.message || `API error: ${res.status}`);
     }
 
     return await res.json();
@@ -24,18 +41,18 @@ const request = async (endpoint, options = {}) => {
 import products from "./data/products.json";
 
 
-// ------- CATEGORIES --------
+// ------- CATEGORIES (Backend Bind) --------
 
 export const fetchCategories = async () => {
   return request("/categories");
 };
 
-// ----- featch SubCategories
+// ----- featch SubCategories (Backend Bind) --------
 export const fetchSubCategories = async () => {
   return request("/subcategories");
 };
 
-// ------- PRODUCTS --------
+// ------- PRODUCTS (Backend Bind) --------
 
 export const fetchProducts = async ({ 
   searchText, 
@@ -122,35 +139,19 @@ export const fetchAddresses = async () => {
 
 // ------- ORDERS  --------
 
-// ------- ADD ORDERS  --------
+// ------- ADD ORDERS (Backend Bind) --------
 export const createOrder = async (orderData) => {
-  const auth = JSON.parse(localStorage.getItem("auth"));
-  if (!auth?.userid) {
-    return { success: false, message: "Not logged in" };
+  try {
+    const data = await request("/user/orders", {
+      method: "POST",
+      body: JSON.stringify(orderData),
+    });
+
+    return { success: true, order: data.data };
+  } catch (error) {
+    return { success: false, message: error.message };
   }
-
-  const datePart = new Date().toISOString().slice(0,10).replace(/-/g, "");
-  const timePart = Date.now().toString().slice(-4); 
-  const randomPart = Math.floor(Math.random() * 10000);
-  const orderId = `ORD-${datePart}-${timePart}-${randomPart}`;
-
-  const newOrder = {
-    ...orderData,
-    status: "Order Placed",
-    isPaid: orderData.paymentMethod === "Online" ? true : false ,
-    orderId,
-    userId: auth.userid,
-    createdAt: new Date().toISOString(),
-  };
-
-  const orders = JSON.parse(localStorage.getItem("orders") || "[]")
-
-  orders.push(newOrder);
-
-  localStorage.setItem("orders", JSON.stringify(orders));
-  return { success: true, order: newOrder };
 };
-
 
 // ------- GET ORDERS  --------
 export const fetchUserOrders = () => {
